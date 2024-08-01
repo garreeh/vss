@@ -16,9 +16,12 @@ $sql = "SELECT * FROM user WHERE user_name = '$user_name' AND user_password = '$
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    echo json_encode(array('status' => 'success', 'message' => 'Login successful!'));
+    // Example token, you should generate a secure token or use JWT in a real application
+    $token = bin2hex(random_bytes(16)); 
+
+    echo json_encode(array('status' => 'success', 'message' => 'Login successful!', 'token' => $token));
 } else {
-    echo json_encode(array('status' => 'error', 'message' => 'Invalid email or password.'));
+    echo json_encode(array('status' => 'error', 'message' => 'Invalid username or password.'));
 }
 
 $conn->close();
