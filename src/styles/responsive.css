@@ -1,0 +1,23 @@
+/* src/styles/responsive.css */
+
+/* Mobile-first styles */
+@media (max-width: 767px) {
+  .card-container {
+    padding: 10px;
+  }
+  
+  .ion-card {
+    padding: 10px;
+  }
+}
+
+/* Tablet and larger devices */
+@media (min-width: 768px) {
+  .card-container {
+    padding: 20px;
+  }
+
+  .ion-card {
+    padding: 20px;
+  }
+}
