@@ -7,7 +7,7 @@ export const isAuthenticated = (): boolean => {
 
 export async function login(credentials: { user_name: string; user_password: string }): Promise<any> {
   try {
-    const response = await fetch('http://192.168.100.125/IonicProject/vss/backend/login_process.php', {
+    const response = await fetch('http://192.168.69.118/IonicProject/vss/backend/login_process.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

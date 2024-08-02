@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://192.168.100.125/IonicProject/vss/connection/', // Adjust the base URL if necessary
+  baseURL: 'http://192.168.69.118/IonicProject/vss/connection/', // Adjust the base URL if necessary
   headers: {
     'Content-Type': 'application/json'
   }

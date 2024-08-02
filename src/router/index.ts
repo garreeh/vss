@@ -4,8 +4,15 @@ import { isAuthenticated } from '../auth';
 
 const routes: Array<RouteRecordRaw> = [
   { path: '/', redirect: '/login' }, // Redirect root to login page
-  { path: '/login', component: () => import('../views/LoginPage.vue') },
-  { path: '/home', component: () => import('../views/HomePage.vue') }, // Adjust as necessary
+  { path: '/login', component: () => import('../views/LoginPage.vue') }, // Adjust as necessary
+  { path: '/home', component: () => import('../views/HomePage.vue') },
+  { path: '/client', component: () => import('../views/ClientPage.vue') },
+  { path: '/patient', component: () => import('../views/PatientPage.vue') },
+  { path: '/vaccination', component: () => import('../views/VaccinationPage.vue') },
+  { path: '/case', component: () => import('../views/CasePage.vue') },
+  { path: '/confinement', component: () => import('../views/ConfinementPage.vue') },
+  { path: '/billing', component: () => import('../views/BillingPage.vue') },
+
 ];
 
 const router = createRouter({
