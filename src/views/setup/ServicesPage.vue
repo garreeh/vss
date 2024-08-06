@@ -11,7 +11,7 @@
 
       <div id="container">
         <strong class="capitalize">{{ $route.params.id }}</strong>
-        <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">Client Page to</a></p>
+        <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">Services Page to</a></p>
       </div>
     </ion-content>
   </ion-page>
@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-import Header from './../components/Header.vue';
+import Header from './../../components/Header.vue';
 
 </script>
 

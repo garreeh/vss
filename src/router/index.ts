@@ -3,16 +3,27 @@ import { RouteRecordRaw } from 'vue-router';
 import { isAuthenticated } from '../auth';
 
 const routes: Array<RouteRecordRaw> = [
-  { path: '/', redirect: '/login' }, // Redirect root to login page
-  { path: '/login', component: () => import('../views/LoginPage.vue') }, // Adjust as necessary
+  { path: '/', redirect: '/login' },
+  { path: '/login', component: () => import('../views/LoginPage.vue') },
+  { path: '/register', component: () => import('../views/RegisterPage.vue') },
+  { path: '/forgot-password', component: () => import('../views/ForgotPassPage.vue') },
   { path: '/home', component: () => import('../views/HomePage.vue') },
-  { path: '/client', component: () => import('../views/ClientPage.vue') },
+  
+  // This is specific Pet Page.
+  {
+    path: '/pet-details/:petName',
+    name: 'PetDetails',
+    component: () => import('../views/ViewPetPage.vue'),
+  },
+
+  { path: '/pet', component: () => import('../views/PetPage.vue') },
   { path: '/patient', component: () => import('../views/PatientPage.vue') },
-  { path: '/vaccination', component: () => import('../views/VaccinationPage.vue') },
   { path: '/case', component: () => import('../views/CasePage.vue') },
   { path: '/confinement', component: () => import('../views/ConfinementPage.vue') },
   { path: '/billing', component: () => import('../views/BillingPage.vue') },
-
+  { path: '/setup/services', component: () => import('../views/setup/ServicesPage.vue') },
+  { path: '/setup/vaccine', component: () => import('../views/setup/UsersPage.vue') },
+  { path: '/setup/user', component: () => import('../views/setup/VaccinePage.vue') },
 ];
 
 const router = createRouter({
@@ -21,18 +32,20 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const authenticated = isAuthenticated(); // Check if user is authenticated
+  const authenticated = isAuthenticated();
 
-  // If user is authenticated and trying to access login page, redirect to home
-  if (authenticated && to.path === '/login') {
-    next('/home'); // Redirect to home page
-  } else if (!authenticated && to.path !== '/login') {
-    // If user is not authenticated and trying to access a protected page, redirect to login
+  // This is for testing only.
+  // console.log(`Navigating to: ${to.path}, Authenticated: ${authenticated}`);
+
+  const publicPages = ['/login', '/register', '/forgot-password'];
+
+  if (!authenticated && !publicPages.includes(to.path)) {
     next('/login');
+  } else if (authenticated && publicPages.includes(to.path)) {
+    next('/home');
   } else {
-    next(); // Allow navigation if authenticated or if route is login
+    next();
   }
 });
-
 
 export default router;

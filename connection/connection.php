@@ -6,7 +6,7 @@ header("Access-Control-Allow-Headers: Content-Type"); // Allow specific headers
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "vss_clean";
+$dbname = "vssphcom_pet911";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

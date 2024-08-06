@@ -1,0 +1,149 @@
+<template>
+  <ion-page>
+    <Header :title="$route.params.petName" />
+
+    <ion-content :fullscreen="true">
+      <ion-header collapse="condense">
+        <ion-toolbar>
+          <ion-title size="large">{{ petName }}</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      
+      <div id="container">
+        <div>
+          <ion-avatar>
+            <img src="./../images/avatar.png" alt="Pet Avatar"/>
+            <ion-label class="verified-label">PET PAGE</ion-label>
+          </ion-avatar>
+        </div>
+
+        <strong class="capitalize">Hi, {{ petName }}</strong>
+
+        <ion-segment v-model="selectedSegment">
+          <ion-segment-button value="PetInfo">
+            Pet Info
+          </ion-segment-button>
+          <ion-segment-button value="Cases">
+            Cases
+          </ion-segment-button>
+        </ion-segment>
+        
+        <div v-if="selectedSegment === 'PetInfo'">
+          <PetInformation :petName="petName" />
+        </div>
+        <div v-if="selectedSegment === 'Cases'">
+          <PetCases :petName="petName" />
+        </div>
+      </div>
+    </ion-content>
+  </ion-page>
+</template>
+
+<script setup lang="ts">
+import { ref, } from 'vue';
+import { useRoute } from 'vue-router';
+import { IonLabel, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonAvatar, IonSegmentButton, IonSegment } from '@ionic/vue';
+import Header from './../components/Header.vue';
+import PetInformation from './../components/petinfo/PetInfoPage.vue';
+import PetCases from './../components/petinfo/PetCasePage.vue';
+
+const selectedSegment = ref('PetInfo');
+
+// Extract pet name from route params
+const route = useRoute();
+const petName = ref(decodeURIComponent(route.params.petName as string));
+
+</script>
+
+<style scoped>
+#container {
+  text-align: center;
+  padding: 15px;
+}
+
+#container ion-avatar {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+}
+
+#container ion-avatar img {
+  border-radius: 50%;
+}
+
+#container ion-label.verified-label {
+  display: block;
+  background-color: #4caf50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+  display: block;
+  margin: 10px 0;
+}
+
+#container p {
+  font-size: 16px;
+  line-height: 22px;
+  color: #8c8c8c;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  #container {
+    padding: 30px;
+  }
+
+  #container ion-avatar {
+    width: 150px;
+    height: 150px;
+  }
+
+  #container ion-label.verified-label {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  #container strong {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  #container p {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  #container {
+    padding: 50px;
+  }
+
+  #container ion-avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  #container ion-label.verified-label {
+    font-size: 12px
+  }
+
+  #container strong {
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  #container p {
+    font-size: 20px;
+    line-height: 26px;
+  }
+}
+</style>

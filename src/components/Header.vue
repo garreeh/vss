@@ -18,8 +18,9 @@ import { IonButtons, IonHeader, IonMenuButton, IonTitle, IonToolbar, IonButton }
 const logout = () => {
   // Remove the token from localStorage
   localStorage.removeItem('authToken');
-  localStorage.removeItem('userFirstname');
-  localStorage.removeItem('userLastname');
+  localStorage.removeItem('clientId');
+  localStorage.removeItem('clientFirstname');
+  localStorage.removeItem('clientLastname');
   
   // Redirect to login page
   window.location.href = '/login';

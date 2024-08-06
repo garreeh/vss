@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
+import 'jquery';
+import './../node_modules/datatables.net-dt/css/dataTables.dataTables.css';
 
 import { IonicVue } from '@ionic/vue';
 

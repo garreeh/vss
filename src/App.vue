@@ -1,18 +1,14 @@
 <template>
   <ion-app>
     <ion-split-pane v-if="showSidebar" content-id="main-content">
-      <ion-menu content-id="main-content" type="overlay">
+      <ion-menu content-id="main-content" type="overlay" :disabled="disableMenu">
         <ion-content>
           <ion-list id="inbox-list">
-            <ion-list-header>{{ userName }}</ion-list-header>
-
+            <!-- <ion-list-header>{{ userName }}</ion-list-header> -->
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item
-                @click="selectedIndex = i; toggleAccordion(p.title)"
-                router-direction="root"
-                :router-link="p.url"
-                lines="none"
-                :detail="false"
+                class="menu-item"
+                @click="handleItemClick(p, i, $event)"
                 :class="{ selected: selectedIndex === i }"
               >
                 <ion-icon aria-hidden="true" slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
@@ -27,11 +23,7 @@
                 <ion-item
                   v-for="(subPage, j) in p.subPages"
                   :key="j"
-                  @click="selectedIndex = `${i}-${j}`"
-                  router-direction="root"
-                  :router-link="subPage.url"
-                  lines="none"
-                  :detail="false"
+                  @click="handleSubItemClick(i, j, subPage.url, $event)"
                   :class="{ selected: selectedIndex === `${i}-${j}` }"
                   class="sub-item"
                 >
@@ -51,7 +43,7 @@
 
 <script setup>
 import { ref, watchEffect, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import {
   IonApp,
   IonContent,
@@ -88,6 +80,8 @@ import {
 const selectedIndex = ref(0);
 const showSidebar = ref(true);
 const openAccordions = ref([]);
+const disableMenu = ref(false);
+
 const appPages = [
   {
     title: 'Dashboard',
@@ -96,22 +90,10 @@ const appPages = [
     mdIcon: homeSharp,
   },
   {
-    title: 'Client',
-    url: '/client',
+    title: 'My Pets',
+    url: '/pet',
     iosIcon: personOutline,
     mdIcon: personSharp,
-  },
-  {
-    title: 'Patient',
-    url: '/patient',
-    iosIcon: personOutline,
-    mdIcon: personSharp,
-  },
-  {
-    title: 'Vaccination',
-    url: '/vaccination',
-    iosIcon: calendarOutline,
-    mdIcon: calendarSharp,
   },
   {
     title: 'Case',
@@ -120,52 +102,28 @@ const appPages = [
     mdIcon: clipboardSharp,
   },
   {
-    title: 'Confinement',
-    url: '/confinement',
-    iosIcon: clipboardOutline,
-    mdIcon: clipboardSharp,
-  },
-  {
-    title: 'Billing',
-    url: '/billing',
-    iosIcon: cashOutline,
-    mdIcon: cashSharp,
-  },
-  {
-    title: 'Inventory',
-    iosIcon: documentOutline,
-    mdIcon: documentSharp,
-    subPages: [
-      { title: 'Items', url: '/inventory/items', iosIcon: documentOutline, mdIcon: documentSharp },
-      { title: 'Categories', url: '/inventory/categories', iosIcon: documentOutline, mdIcon: documentSharp },
-    ],
-  },
-  {
-    title: 'Report',
-    iosIcon: documentOutline,
-    mdIcon: documentSharp,
-    subPages: [
-      { title: 'Sales', url: '/report/sales', iosIcon: documentOutline, mdIcon: documentSharp },
-      { title: 'Expenses', url: '/report/expenses', iosIcon: documentOutline, mdIcon: documentSharp },
-    ],
-  },
-  {
     title: 'Setup',
     iosIcon: settingsOutline,
     mdIcon: settingsSharp,
     subPages: [
-      { title: 'Profile', url: '/setup/profile', iosIcon: settingsOutline, mdIcon: settingsSharp },
-      { title: 'Preferences', url: '/setup/preferences', iosIcon: settingsOutline, mdIcon: settingsSharp },
+      { title: 'Preferences', url: '/setup/services', iosIcon: settingsOutline, mdIcon: settingsSharp },
+      { title: 'Account', url: '/setup/user', iosIcon: personOutline, mdIcon: personSharp },
     ],
   },
 ];
 
 const route = useRoute();
+const router = useRouter();
 
 // Watch route changes to toggle sidebar visibility
 watchEffect(() => {
-  showSidebar.value = route.path !== '/login';
+  const shouldShowSidebar = !['/login', '/register', '/forgot-password'].includes(route.path);
+  showSidebar.value = shouldShowSidebar;
+
+  // This is for testing only.
+  // console.log(`showSidebar: ${showSidebar.value}, Current path: ${route.path}`);
 });
+
 
 const path = window.location.pathname.split('/')[1];
 if (path) {
@@ -175,8 +133,8 @@ if (path) {
 const userName = ref('Guest');
 
 onMounted(() => {
-  const firstname = localStorage.getItem('userFirstname') || 'Guest';
-  const lastname = localStorage.getItem('userLastname') || '';
+  const firstname = localStorage.getItem('clientFirstname') || 'Guest';
+  const lastname = localStorage.getItem('clientLastname') || '';
   userName.value = `${firstname} ${lastname}`;
 });
 
@@ -189,10 +147,24 @@ const toggleAccordion = (title) => {
 };
 
 const isOpen = (title) => openAccordions.value.includes(title);
+
+const handleItemClick = (page, index, event) => {
+  if (page.subPages) {
+    event.stopPropagation();
+    event.preventDefault();
+    toggleAccordion(page.title);
+  } else {
+    selectedIndex.value = index;
+    router.push(page.url);
+  }
+};
+
+const handleSubItemClick = (parentIndex, subIndex, url, event) => {
+  selectedIndex.value = `${parentIndex}-${subIndex}`;
+  router.push(url);
+};
+
 </script>
-
-
-
 
 <style scoped>
 .sub-item {
@@ -317,5 +289,14 @@ ion-note {
 
 ion-item.selected {
   --color: var(--ion-color-primary);
+}
+
+/* Add cursor pointer */
+.menu-item {
+  cursor: pointer;
+}
+
+.sub-item {
+  cursor: pointer;
 }
 </style>

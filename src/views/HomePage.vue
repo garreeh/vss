@@ -8,34 +8,94 @@
           <ion-title size="large">{{ $route.params.id }}</ion-title>
         </ion-toolbar>
       </ion-header>
-
+      
       <div id="container">
-        <strong class="capitalize">{{ $route.params.id }}</strong>
-        <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">Home Page to</a></p>
+        <div>
+          <ion-avatar>
+            <img src="./../images/avatar.png" alt="Client Avatar"/>
+            <ion-label class="verified-label">Verified</ion-label>
+          </ion-avatar>
+        </div>
+
+        <strong class="capitalize">Hi, {{ userName }}</strong>
+
+        <ion-segment v-model="selectedSegment">
+          <ion-segment-button value="info">
+            Info
+          </ion-segment-button>
+          <ion-segment-button value="pets">
+            Pets
+          </ion-segment-button>
+          <ion-segment-button value="bill">
+            Bill
+          </ion-segment-button>
+        </ion-segment>
+        
+        <div v-if="selectedSegment === 'info'">
+          <Information :title="$route.params.id" />
+        </div>
+        <div v-if="selectedSegment === 'pets'">
+          <PetDashboard :title="$route.params.id" />
+        </div>
+        <div v-if="selectedSegment === 'bill'">
+          <!-- Content for Bill -->
+          <p>Client Billing Details...</p>
+        </div>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { ref, onMounted } from 'vue';
 import Header from './../components/Header.vue';
+import Information from './../components/clientinfo/InfoPage.vue';
+import PetDashboard from './../components/clientinfo/PetsDashboardPage.vue';
 
+import { IonLabel, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonAvatar, IonSegmentButton, IonSegment } from '@ionic/vue';
+
+const selectedSegment = ref('info');
+
+const userName = ref('Guest');
+onMounted(() => {
+  const firstname = localStorage.getItem('clientFirstname') || 'Guest';
+  const lastname = localStorage.getItem('clientLastname') || '';
+  userName.value = `${firstname} ${lastname}`;
+});
 </script>
 
 <style scoped>
 #container {
   text-align: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  padding: 15px;
+}
+
+#container ion-avatar {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+}
+
+#container ion-avatar img {
+  border-radius: 50%;
+}
+
+#container ion-label.verified-label {
+  display: block;
+  background-color: #4caf50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 10px;
 }
 
 #container strong {
   font-size: 20px;
   line-height: 26px;
+  display: block;
+  margin: 10px 0;
 }
 
 #container p {
@@ -45,7 +105,54 @@ import Header from './../components/Header.vue';
   margin: 0;
 }
 
-#container a {
-  text-decoration: none;
+@media (min-width: 768px) {
+  #container {
+    padding: 30px;
+  }
+
+  #container ion-avatar {
+    width: 150px;
+    height: 150px;
+  }
+
+  #container ion-label.verified-label {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  #container strong {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  #container p {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  #container {
+    padding: 50px;
+  }
+
+  #container ion-avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  #container ion-label.verified-label {
+    font-size: 12px
+  }
+
+  #container strong {
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  #container p {
+    font-size: 20px;
+    line-height: 26px;
+  }
 }
 </style>
