@@ -58,7 +58,7 @@ const fetchDataAndDisplay = async () => {
     console.log('Client ID:', clientId);
     console.log('Pet Name:', props.petName);
     
-    const response = await axios.post('http://192.168.69.150/IonicProject/vss/backend/petinfo/patient_solo.php', {
+    const response = await axios.post('http://192.168.100.102/IonicProject/vss/backend/petinfo/patient_solo.php', {
       client_id: parseInt(clientId, 10),
       patient_name: props.petName
     });

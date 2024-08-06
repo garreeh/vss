@@ -19,7 +19,6 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/pet', component: () => import('../views/PetPage.vue') },
   { path: '/patient', component: () => import('../views/PatientPage.vue') },
   { path: '/case', component: () => import('../views/CasePage.vue') },
-  { path: '/confinement', component: () => import('../views/ConfinementPage.vue') },
   { path: '/billing', component: () => import('../views/BillingPage.vue') },
   { path: '/setup/services', component: () => import('../views/setup/ServicesPage.vue') },
   { path: '/setup/vaccine', component: () => import('../views/setup/UsersPage.vue') },

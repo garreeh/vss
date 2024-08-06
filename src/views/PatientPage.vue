@@ -41,7 +41,7 @@ import 'datatables.net-responsive';
 
 const fetchData = async () => {
   try {
-    const response = await fetch('http://192.168.69.150//IonicProject/vss/backend/patient_display.php', {
+    const response = await fetch('http://192.168.100.102//IonicProject/vss/backend/patient_display.php', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

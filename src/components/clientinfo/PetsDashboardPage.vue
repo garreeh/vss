@@ -44,7 +44,7 @@ const fetchDataAndDisplay = async () => {
       return;
     }
     
-    const response = await axios.post('http://192.168.69.150/IonicProject/vss/backend/pet_display.php', {
+    const response = await axios.post('http://192.168.100.102/IonicProject/vss/backend/pet_display.php', {
       client_id: parseInt(clientId, 10)
     });
 
