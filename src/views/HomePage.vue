@@ -12,7 +12,7 @@
       <div id="container">
         <div>
           <ion-avatar>
-            <img src="./../images/avatar.png" alt="Client Avatar"/>
+            <img src="./../images/avatar.webp" alt="Client Avatar"/>
             <ion-label class="verified-label">Verified</ion-label>
           </ion-avatar>
         </div>
@@ -21,7 +21,7 @@
 
         <ion-segment v-model="selectedSegment">
           <ion-segment-button value="info">
-            Info
+            My Details
           </ion-segment-button>
           <ion-segment-button value="pets">
             Pets
@@ -46,7 +46,7 @@
   </ion-page>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted } from 'vue';
 import Header from './../components/Header.vue';
 import Information from './../components/clientinfo/InfoPage.vue';
@@ -62,6 +62,7 @@ onMounted(() => {
   const lastname = localStorage.getItem('clientLastname') || '';
   userName.value = `${firstname} ${lastname}`;
 });
+
 </script>
 
 <style scoped>

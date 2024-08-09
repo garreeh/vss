@@ -1,5 +1,5 @@
 <?php
-include "../connection/connection.php";
+include "../connection/conn_pet911.php";
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -18,6 +18,7 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
   while ($row = $result->fetch_assoc()) {
       $pets[] = array(
+          'patient_id' => $row['patient_id'],
           'patient_name' => $row['patient_name'],
           'patient_microchip' => $row['patient_microchip'],
           'patient_breed' => $row['patient_breed'],

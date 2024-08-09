@@ -1,41 +1,62 @@
 <?php
-include "../connection/connection.php";
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
+header("Content-Type: application/json");
 
 // Read POST data
 $data = json_decode(file_get_contents("php://input"), true);
-error_log("Received data: " . print_r($data, true)); // Log received data
+$client_id = isset($data['client_id']) ? (int)$data['client_id'] : 0;
+$database_name = isset($data['database_name']) ? $data['database_name'] : '';
 
-// Extract client_id from request data
-$client_id = isset($data['client_id']) ? intval($data['client_id']) : 0;
-
-// Validate client_id
-if ($client_id <= 0) {
-    echo json_encode(array('status' => 'error', 'message' => 'Invalid client ID.'));
-    exit;
+if ($client_id <= 0 || empty($database_name)) {
+    echo json_encode(array('status' => 'error', 'message' => 'Invalid client ID or database name.'));
+    exit();
 }
 
-// Sanitize client_id
-$client_id = $conn->real_escape_string($client_id);
+// Connection details for all databases
+$databases = [
+    'vssphcom_pet911' => 'conn_pet911.php',
+    'vssphcom_petish' => 'conn_petish.php',
+    'vssphcom_trial' => 'conn_trial.php'
+];
 
-// Fetch data specific to the authenticated user
+if (!isset($databases[$database_name])) {
+    echo json_encode(array('status' => 'error', 'message' => 'Invalid database name.'));
+    exit();
+}
+
+// Include the correct connection file
+include "../connection/" . $databases[$database_name];
+
+if (!$conn) {
+    echo json_encode(array('status' => 'error', 'message' => 'Database connection failed.'));
+    exit();
+}
+
+// Fetch patient data
 $sql = "SELECT * FROM patient LEFT JOIN client ON patient.client_id = client.client_id WHERE client.client_id = '$client_id'";
 $result = $conn->query($sql);
 
-// Check if any data is found
-if ($result->num_rows > 0) {
-    // Fetch all results as associative array
-    $data = $result->fetch_all(MYSQLI_ASSOC);
-
-    // Output the data as JSON
+$pets = [];
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $pets[] = array(
+            'patient_id' => $row['patient_id'],
+            'patient_name' => $row['patient_name'],
+            'patient_microchip' => $row['patient_microchip'],
+            'patient_breed' => $row['patient_breed'],
+            'patient_species' => $row['patient_species'],
+            'patient_birthdate' => $row['patient_birthdate'],
+            'patient_neutered' => $row['patient_neutered'],
+        );
+    }
     echo json_encode(array(
         'status' => 'success',
-        'data' => $data
+        'data' => $pets
     ));
 } else {
-    echo json_encode(array('status' => 'error', 'message' => 'No data found for the specified client ID.'));
+    echo json_encode(array('status' => 'error', 'message' => 'No pets found for this client.'));
 }
 
 $conn->close();

@@ -67,7 +67,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import loginProcess from './../apiServices/loginProcess';
-import { IonCard, IonCardTitle, IonHeader, IonCardHeader,IonInput, IonItem, IonCol, IonRow, IonGrid, IonCardContent, IonContent, IonTitle, IonToolbar, IonButton } from '@ionic/vue';
+import { IonCard, IonCardTitle, IonHeader, IonCardHeader, IonInput, IonItem, IonCol, IonRow, IonGrid, IonCardContent, IonContent, IonTitle, IonToolbar, IonButton } from '@ionic/vue';
 
 const client_email = ref('');
 const client_password = ref('');
@@ -75,34 +75,24 @@ const loginMessage = ref('');
 const router = useRouter();
 
 const login = async () => {
-  console.log('Login function called');
-  console.log('Client Email:', client_email.value);
-  console.log('Client Password:', client_password.value);
-
   try {
     const response = await loginProcess.login({
       client_email: client_email.value,
       client_password: client_password.value
     });
 
-    console.log('Login response:', response);
-
     if (response.data.status === 'success') {
       const token = response.data.token;
       const clientId = response.data.client_id;
       const clientFirstname = response.data.client_firstname;
       const clientLastname = response.data.client_lastname;
+      const databaseName = response.data.database_name; // New field
 
       localStorage.setItem('authToken', token);
       localStorage.setItem('clientId', clientId);
       localStorage.setItem('clientFirstname', clientFirstname);
       localStorage.setItem('clientLastname', clientLastname);
-
-      // This is for testing only
-      // console.log(`Token stored: ${token}`); // Verify storage
-      // console.log(`User ID: ${clientId}`);
-      // console.log(`Client First Name stored: ${clientFirstname}`); // Verify storage
-      // console.log(`Client Last Name stored: ${clientLastname}`); // Verify storage
+      localStorage.setItem('databaseName', databaseName); // Store database name
 
       window.location.href = '/home';
     } else {
@@ -121,7 +111,6 @@ const forgotPassword = () => {
 const newClient = () => {
   window.location.href = '/register';
 };
-
 
 </script>
 

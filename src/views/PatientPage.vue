@@ -31,7 +31,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 import Header from './../components/Header.vue';
 
 import $ from 'jquery';
@@ -41,7 +41,7 @@ import 'datatables.net-responsive';
 
 const fetchData = async () => {
   try {
-    const response = await fetch('http://192.168.100.102//IonicProject/vss/backend/patient_display.php', {
+    const response = await fetch('http://192.168.69.146//IonicProject/vss/backend/patient_display.php', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

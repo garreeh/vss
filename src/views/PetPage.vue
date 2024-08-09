@@ -53,7 +53,7 @@ const fetchDataAndDisplay = async () => {
     }
     
     // Send POST request to fetch patient data
-    const response = await axios.post('http://192.168.100.102/IonicProject/vss/backend/patient_display.php', {
+    const response = await axios.post('http://192.168.69.146/IonicProject/vss/backend/patient_display.php', {
       client_id: parseInt(clientId, 10) // Ensure it's an integer
     });
 

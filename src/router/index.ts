@@ -9,16 +9,22 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/forgot-password', component: () => import('../views/ForgotPassPage.vue') },
   { path: '/home', component: () => import('../views/HomePage.vue') },
   
-  // This is specific Pet Page.
+  // This is specific for Pet Page.
   {
     path: '/pet-details/:petName',
     name: 'PetDetails',
     component: () => import('../views/ViewPetPage.vue'),
   },
 
+  // This is specific for Case Details Page.
+  {
+    path: '/case-details/:case_id',
+    name: 'CaseDetails',
+    component: () => import('../components/petinfo/PetCaseDetailsPage.vue'),
+  },
+
   { path: '/pet', component: () => import('../views/PetPage.vue') },
   { path: '/patient', component: () => import('../views/PatientPage.vue') },
-  { path: '/case', component: () => import('../views/CasePage.vue') },
   { path: '/billing', component: () => import('../views/BillingPage.vue') },
   { path: '/setup/services', component: () => import('../views/setup/ServicesPage.vue') },
   { path: '/setup/vaccine', component: () => import('../views/setup/UsersPage.vue') },

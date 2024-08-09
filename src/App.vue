@@ -89,18 +89,12 @@ const appPages = [
     iosIcon: homeOutline,
     mdIcon: homeSharp,
   },
-  {
-    title: 'My Pets',
-    url: '/pet',
-    iosIcon: personOutline,
-    mdIcon: personSharp,
-  },
-  {
-    title: 'Case',
-    url: '/case',
-    iosIcon: clipboardOutline,
-    mdIcon: clipboardSharp,
-  },
+  // {
+  //   title: 'My Pets',
+  //   url: '/pet',
+  //   iosIcon: personOutline,
+  //   mdIcon: personSharp,
+  // },
   {
     title: 'Setup',
     iosIcon: settingsOutline,

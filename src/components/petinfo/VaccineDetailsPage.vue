@@ -1,39 +1,57 @@
 <template>
   <div class="info-page">
+    <!-- Check if there are any pets -->
     <div v-if="pets.length > 0" class="pets-list">
-      <ion-card v-for="(pet, index) in pets" :key="index" class="info-item" @click="goToPetDetails(pet)">
+      <ion-card
+        v-for="(pet, index) in pets"
+        :key="index"
+        class="info-item"
+      >
         <ion-item lines="none" class="pet-item">
           <ion-icon :icon="pawSharp" class="pet-icon"></ion-icon>
           <ion-label>
-            <p class="pet-name">{{ pet.patient_name }}</p>
+            <p class="pet-name">Brand: {{ pet.brand || 'No Details' }}</p>
+            <p class="pet-name">Vaccine Date: {{ pet.date_vaccine || 'No Details' }}</p>
+            <p class="pet-name">Vaccine Expiration: {{ pet.expiration || 'No Details' }}</p>
+            <p class="pet-name">Deworm: {{ pet.deworming || 'No Details' }}</p>
           </ion-label>
         </ion-item>
       </ion-card>
     </div>
-    <!-- <p v-else>No pets found for this client.</p> -->
+
+    <!-- Show a message if there are no pets -->
+    <div v-else class="no-cases-message">
+      <p>No cases found for this patient.</p>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import apiService from './../../apiServices/apiService.js';
+import { useRouter, useRoute } from 'vue-router';
 import { pawSharp } from 'ionicons/icons';
 import { IonLabel, IonIcon, IonCard, IonItem } from '@ionic/vue';
 
 // Data references
-const pets = ref([]); // No type annotations here
+const pets = ref([]);
+const route = useRoute();
 
 const fetchDataAndDisplay = async () => {
   try {
     const clientId = localStorage.getItem('clientId');
     const databaseName = localStorage.getItem('databaseName');
-    
-    if (!clientId || !databaseName) {
-      console.error('Client ID or database name is missing in local storage.');
+    const petName = route.params.petName; // Get petName from route params
+
+    if (!clientId || !databaseName || !petName) {
+      console.error('Client ID, database name, or pet name is missing.');
       return;
     }
-    
-    const response = await apiService.fetchPatientData(clientId, databaseName);
+
+    const response = await apiService.fetchVaccineData(clientId, databaseName, petName);
+
+    console.log(response);
+
     if (response.data.status === 'success') {
       pets.value = response.data.data; // Handle array of pets
     } else {
@@ -42,16 +60,6 @@ const fetchDataAndDisplay = async () => {
   } catch (error) {
     console.error('Error fetching data:', error);
   }
-};
-
-const goToPetDetails = (pet) => {
-  // Construct the URL using the pet's name
-  const petName = encodeURIComponent(pet.patient_name);
-  const url = `/pet-details/${petName}`;
-
-  // This is for testing only
-  // console.log(url)
-  window.location.href = url;
 };
 
 // Fetch data when component is mounted
@@ -76,7 +84,6 @@ onMounted(() => {
   width: 100%;
   max-width: 600px;
   margin-bottom: 10px;
-  cursor: pointer; /* Makes the cursor clickable */
 }
 
 .pet-item {

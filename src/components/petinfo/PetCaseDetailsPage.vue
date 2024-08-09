@@ -1,44 +1,38 @@
 <template>
   <ion-page>
-    <Header :title="$route.params.petName" />
+    <Header :title="$route.params.case_id" />
 
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">{{ petName }}</ion-title>
+          <ion-title size="large">{{ patientName }}</ion-title>
         </ion-toolbar>
       </ion-header>
       
       <div id="container">
         <div>
           <ion-avatar>
-            <img src="./../images/avatar.webp" alt="Pet Avatar"/>
-            <ion-label class="verified-label">PET PAGE</ion-label>
+            <img src="./../../images/avatar.webp" alt="Pet Avatar"/>
+            <ion-label class="verified-label">PET CASE</ion-label>
           </ion-avatar>
         </div>
 
-        <strong class="capitalize">Hi, {{ petName }}</strong>
+        <strong class="capitalize">{{ patientName }}</strong>
 
         <ion-segment v-model="selectedSegment">
           <ion-segment-button value="PetInfo">
-            Pet Details
+            Case Details
           </ion-segment-button>
           <ion-segment-button value="Cases">
-            Cases
-          </ion-segment-button>
-          <ion-segment-button value="Vaccine">
-            Vaccine
+            Case Files
           </ion-segment-button>
         </ion-segment>
         
         <div v-if="selectedSegment === 'PetInfo'">
-          <PetInformation :petName="petName" />
+          <CaseInformation :petName="patientName" />
         </div>
         <div v-if="selectedSegment === 'Cases'">
-          <PetCases :petName="petName" />
-        </div>
-        <div v-if="selectedSegment === 'Vaccine'">
-          <PetVaccine :petName="petName" />
+          <FileCases :petName="patientName" />
         </div>
       </div>
     </ion-content>
@@ -46,21 +40,52 @@
 </template>
 
 <script setup lang="ts">
-import { ref, } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { IonLabel, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonAvatar, IonSegmentButton, IonSegment } from '@ionic/vue';
-import Header from './../components/Header.vue';
-import PetInformation from './../components/petinfo/PetInfoPage.vue';
-import PetCases from './../components/petinfo/PetCasePage.vue';
-import PetVaccine from './../components/petinfo/VaccineDetailsPage.vue';
-
+import Header from './../../components/Header.vue';
+import CaseInformation from './../../components/caseinfo/CaseInfoPage.vue';
+import FileCases from './../../components/caseinfo/FileInfoPage.vue';
+import axios from 'axios';
 
 const selectedSegment = ref('PetInfo');
 
-// Extract pet name from route params
-const route = useRoute();
-const petName = ref(decodeURIComponent(route.params.petName as string));
+const patientName = ref('');
 
+// Route parameters
+const route = useRoute();
+const caseId = ref(route.params.case_id); // Fetch case_id from route parameters
+
+// const fetchDataAndDisplay = async () => {
+//   try {
+//     const clientId = localStorage.getItem('clientId');
+    
+//     if (!clientId) {
+//       console.error('Client ID is missing.');
+//       return;
+//     }
+
+//     const response = await axios.post('http://192.168.69.146/IonicProject/vss/backend/petinfo/case_display.php', {
+//       client_id: parseInt(clientId, 10),
+//       case_id: caseId.value
+//     });
+
+//     if (response.data.status === 'success') {
+//       const { patient_name } = response.data.data[0]; // Access patient_name from the first result
+//       patientName.value = patient_name || 'No Details';
+//       console.log(patientName.value);
+//     } else {
+//       console.error('Error:', response.data.message);
+//     }
+//   } catch (error) {
+//     console.error('Error fetching data:', error);
+//   }
+// };
+
+// // Fetch data when component is mounted
+// onMounted(() => {
+//   fetchDataAndDisplay();
+// });
 </script>
 
 <style scoped>

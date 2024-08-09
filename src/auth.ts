@@ -1,13 +1,15 @@
 // src/auth.ts
 export const isAuthenticated = (): boolean => {
   const token = localStorage.getItem('authToken');
+
+  // This is for testing only
   console.log('Retrieved Token:', token); // Debugging line to check token value
   return token !== null; // Return true if token is not null
 };
 
 export async function login(credentials: { user_name: string; user_password: string }): Promise<any> {
   try {
-    const response = await fetch('http://192.168.100.102/IonicProject/vss/backend/login_process.php', {
+    const response = await fetch('http://192.168.69.146/IonicProject/vss/backend/login_process.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

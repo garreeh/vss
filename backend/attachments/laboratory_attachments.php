@@ -9,11 +9,9 @@ $data = json_decode(file_get_contents("php://input"), true);
 $client_id = isset($data['client_id']) ? (int)$data['client_id'] : 0;
 $database_name = isset($data['database_name']) ? $data['database_name'] : '';
 $case_id = isset($data['case_id']) ? (int)$data['case_id'] : 0;
-
-
-
-if ($client_id <= 0 || empty($database_name)) {
-    echo json_encode(array('status' => 'error', 'message' => 'Invalid client ID or database name.'));
+// Validate input
+if ($client_id <= 0 || empty($database_name) || empty($case_id)) {
+    echo json_encode(array('status' => 'error', 'message' => 'Invalid data.'));
     exit();
 }
 
@@ -30,31 +28,36 @@ if (!isset($databases[$database_name])) {
 }
 
 // Include the correct connection file
-include "../connection/" . $databases[$database_name];
+include "./../../connection/" . $databases[$database_name];
 
 if (!$conn) {
     echo json_encode(array('status' => 'error', 'message' => 'Database connection failed.'));
     exit();
 }
 
-// Fetch client data
-$sql = "SELECT * FROM client WHERE client_id = '$client_id'";
+// Prepare the SQL query
+$sql = "SELECT * FROM lab_file_attachments WHERE case_id = $case_id";
 $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-    $user = $result->fetch_assoc();
-    echo json_encode(array(
-        'status' => 'success',
-        'data' => array(
-            'client_address' => $user['client_address'],
-            'client_email' => $user['client_email'],
-            'client_mobile' => $user['client_mobile'],
-            'client_home' => $user['client_home']
-        )
-    ));
+// Execute the query
+if ($result) {
+    if ($result->num_rows > 0) {
+        $attachments = array();
+        
+        // Fetch data and format it as an array
+        while ($row = $result->fetch_assoc()) {
+            $attachments[] = $row;
+        }
+
+        // Return the data as JSON
+        echo json_encode(array('status' => 'success', 'data' => $attachments));
+    } else {
+        echo json_encode(array('status' => 'error', 'message' => 'No attachments found for the given case ID'));
+    }
 } else {
-    echo json_encode(array('status' => 'error', 'message' => 'User not found.'));
+    echo json_encode(array('status' => 'error', 'message' => 'Failed to execute query'));
 }
 
+// Close the connection
 $conn->close();
 ?>

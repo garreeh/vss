@@ -2,11 +2,11 @@
   <ion-header :translucent="true">
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-menu-button color="primary"></ion-menu-button>
+        <ion-menu-button color="primary" class="menu-button"></ion-menu-button>
       </ion-buttons>
-      <ion-title> VSS Application </ion-title>
+      <ion-title class="title">VSS Application</ion-title>
       <ion-buttons slot="end">
-        <ion-button @click="logout">Logout</ion-button>
+        <ion-button @click="logout" class="logout-button">Logout</ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
@@ -28,5 +28,34 @@ const logout = () => {
 </script>
 
 <style scoped>
-/* Add any styles specific to the header component here */
+/* Header styling */
+.ion-header {
+  position: relative;
+  z-index: 1; /* Ensure header is on top */
+}
+
+/* Style for menu button */
+.menu-button {
+  z-index: 2; /* Ensure menu button is above other elements */
+}
+
+/* Style for title */
+.title {
+  z-index: 1; /* Title is on the same level as header */
+}
+
+/* Style for logout button */
+.logout-button {
+  z-index: 2; /* Ensure logout button is above other elements */
+}
+
+/* If you have an image in the header that needs to be moved to the front */
+.header-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px; /* Adjust size as needed */
+  height: auto;
+  z-index: 3; /* Ensure image is on top */
+}
 </style>

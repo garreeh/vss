@@ -7,12 +7,11 @@ header("Content-Type: application/json");
 // Read POST data
 $data = json_decode(file_get_contents("php://input"), true);
 $client_id = isset($data['client_id']) ? (int)$data['client_id'] : 0;
-$case_id = isset($data['case_id']) ? (int)$data['case_id'] : 0;
 $database_name = isset($data['database_name']) ? $data['database_name'] : '';
 
 // Validate input
-if ($client_id <= 0 || empty($database_name) || empty($case_id)) {
-    echo json_encode(array('status' => 'error', 'message' => 'Invalid case data.'));
+if ($client_id <= 0 || empty($database_name)) {
+    echo json_encode(array('status' => 'error', 'message' => 'Invalid data.'));
     exit();
 }
 
@@ -38,25 +37,21 @@ if (!$conn) {
 
 $sql = "SELECT * FROM `case`
         LEFT JOIN patient ON `case`.patient_id = patient.patient_id
-        WHERE patient.client_id = '$client_id' AND case_id = $case_id";
+        WHERE patient.client_id = '$client_id'";
 $result = $conn->query($sql);
 
 $pets = [];
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        // Format the case dates
-        $case_date = new DateTime($row['case_date']);
-        $formatted_case_date = $case_date->format('Y-m-d');
+        $case_date = date("Y-m-d", strtotime($row['case_date']));
+        $case_date_followup = date("Y-m-d", strtotime($row['case_date_followup']));
         
-        $case_date_followup = new DateTime($row['case_date_followup']);
-        $formatted_case_date_followup = $case_date_followup->format('Y-m-d');
-
         $pets[] = array(
             'patient_id' => $row['patient_id'],
             'patient_name' => $row['patient_name'],
             'case_id' => $row['case_id'],
-            'case_date' => $formatted_case_date,
-            'case_date_followup' => $formatted_case_date_followup,
+            'case_date' => $case_date,
+            'case_date_followup' => $case_date_followup,
             'attending_vet' => $row['attending_vet'],
             'temp' => $row['temp'],
             'weight' => $row['weight'],
@@ -74,6 +69,7 @@ if ($result->num_rows > 0) {
 } else {
     echo json_encode(array('status' => 'error', 'message' => 'No cases found for this patient.'));
 }
+
 
 $conn->close();
 ?>

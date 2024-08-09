@@ -1,29 +1,31 @@
 <template>
   <div class="info-page">
     <div class="info-item">
-      <p><strong>Address:</strong></p>
-      <p>{{ address }}</p>
-    </div>
-    <div class="info-item">
-      <p><strong>Email:</strong></p>
-      <p>{{ email }}</p>
-    </div>
-    <div class="contact-info">
-      <div class="info-item">
-        <p><strong>Mobile:</strong></p>
-        <p>{{ mobile }}</p>
-      </div>
-      <div class="info-item">
-        <p><strong>Telephone:</strong></p>
-        <p>{{ telephone }}</p>
-      </div>
+      <ul class="info-list">
+        <li>
+          <span class="label">Address:</span>
+          <span class="data">{{ address }}</span>
+        </li>
+        <li>
+          <span class="label">Email:</span>
+          <span class="data">{{ email }}</span>
+        </li>
+        <li>
+          <span class="label">Mobile:</span>
+          <span class="data">{{ mobile }}</span>
+        </li>
+        <li>
+          <span class="label">Telephone:</span>
+          <span class="data">{{ telephone }}</span>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import apiService from './../../apiServices/apiService.js';
 
 // Data references
 const address = ref('');
@@ -31,27 +33,25 @@ const email = ref('');
 const mobile = ref('');
 const telephone = ref('');
 
+// Fetch data and update state
 const fetchDataAndDisplay = async () => {
   try {
-    // Retrieve client_id from local storage
     const clientId = localStorage.getItem('clientId');
-    
-    if (!clientId) {
-      console.error('Client ID is missing in local storage.');
+    const databaseName = localStorage.getItem('databaseName');
+
+    if (!clientId || !databaseName) {
+      console.error('Client ID or database name is missing in local storage.');
       return;
     }
-    
-    const response = await axios.post('http://192.168.100.102/IonicProject/vss/backend/client_display.php', {
-      client_id: parseInt(clientId, 10)
-    });
+
+    const response = await apiService.fetchClientData(clientId, databaseName);
 
     if (response.data.status === 'success') {
       const { client_address, client_email, client_mobile, client_home } = response.data.data;
-      address.value = client_address || 'No Address Provided'; // Handle potential undefined values
+      address.value = client_address || 'No Address Provided';
       email.value = client_email || 'No Email Provided';
       mobile.value = client_mobile || 'No Mobile Phone Provided';
       telephone.value = client_home || 'No Telephone Provided';
-
     } else {
       console.error('Error:', response.data.message);
     }
@@ -64,38 +64,37 @@ const fetchDataAndDisplay = async () => {
 onMounted(() => {
   fetchDataAndDisplay();
 });
-
 </script>
 
 <style scoped>
 .info-page {
-  padding: 15px;
-  text-align: center;
+  padding: 20px;
+  text-align: left;
 }
 
 .info-page h2 {
   font-size: 24px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
-.info-item {
-  margin-bottom: 10px;
+.info-list {
+  list-style: none;
+  padding: 0;
 }
 
-.info-item p {
-  margin: 0;
-  font-size: 16px;
-  color: #666;
-}
-
-.contact-info {
+.info-list li {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-bottom: 15px;
+  padding: 5px 0;
 }
 
-.contact-info .info-item {
-  width: 100%;
+.info-list .label {
+  flex: 1;
+  font-weight: bold;
+}
+
+.info-list .data {
+  flex: 2;
 }
 
 @media (min-width: 768px) {
@@ -107,18 +106,12 @@ onMounted(() => {
     font-size: 28px;
   }
 
-  .info-item p {
+  .info-list .label, .info-list .data {
     font-size: 18px;
   }
 
-  .contact-info {
-    flex-direction: row;
-    justify-content: space-around;
-  }
-
-  .contact-info .info-item {
-    width: 45%;
-    text-align: center;
+  .info-list li {
+    margin-bottom: 20px;
   }
 }
 
@@ -131,11 +124,7 @@ onMounted(() => {
     font-size: 32px;
   }
 
-  .info-item p {
-    font-size: 20px;
-  }
-
-  .contact-info .info-item p {
+  .info-list .label, .info-list .data {
     font-size: 20px;
   }
 }

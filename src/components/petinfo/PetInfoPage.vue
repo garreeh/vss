@@ -29,15 +29,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, onMounted, defineProps } from 'vue';
-
-import axios from 'axios';
-
-// Define props
-const props = defineProps<{
-  petName: string;
-}>();
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import apiService from './../../apiServices/apiService.js';
 
 // Data references
 const microchip = ref('');
@@ -46,33 +41,29 @@ const species = ref('');
 const birthdate = ref('');
 const neutered = ref('');
 
+// Use the route to get the petName parameter
+const route = useRoute();
+
 const fetchDataAndDisplay = async () => {
   try {
     const clientId = localStorage.getItem('clientId');
-    
-    if (!clientId) {
-      console.error('Client ID is missing in local storage.');
+    const databaseName = localStorage.getItem('databaseName');
+    const petName = route.params.petName; // Get petName from route params
+
+    if (!clientId || !databaseName || !petName) {
+      console.error('Client ID, database name, or pet name is missing.');
       return;
     }
 
-    console.log('Client ID:', clientId);
-    console.log('Pet Name:', props.petName);
-    
-    const response = await axios.post('http://192.168.100.102/IonicProject/vss/backend/petinfo/patient_solo.php', {
-      client_id: parseInt(clientId, 10),
-      patient_name: props.petName
-    });
-
-    console.log('API Response:', response.data);
+    const response = await apiService.fetchPatientSoloData(clientId, databaseName, petName);
 
     if (response.data.status === 'success') {
-      const { patient_microchip, patient_breed, patient_species, patient_birthdate, patient_neutered } = response.data.data;
+      const { patient_id, patient_microchip, patient_breed, patient_species, patient_birthdate, patient_neutered } = response.data.data;
       microchip.value = patient_microchip || 'No Microchip Provided';
       breed.value = patient_breed || 'No Breed Provided';
       species.value = patient_species || 'No Species Provided';
       birthdate.value = patient_birthdate || 'No Birthdate Provided';
       neutered.value = patient_neutered || 'Not Specified';
-
     } else {
       console.error('Error:', response.data.message);
     }
@@ -81,13 +72,12 @@ const fetchDataAndDisplay = async () => {
   }
 };
 
-
-
 // Fetch data when component is mounted
 onMounted(() => {
   fetchDataAndDisplay();
 });
 </script>
+
 
 <style scoped>
 .info-page {
