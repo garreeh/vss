@@ -16,7 +16,7 @@ $client_password = isset($data['client_password']) ? $data['client_password'] : 
 // Connection details for all databases
 $databases = [
     'pet911' => ['conn_file' => 'conn_pet911.php'],
-    // 'petish' => ['conn_file' => 'conn_petish.php'],
+    'petish' => ['conn_file' => 'conn_petish.php'],
     'trial' => ['conn_file' => 'conn_trial.php']
 ];
 
