@@ -4,7 +4,9 @@
       <ion-buttons slot="start">
         <ion-menu-button color="primary" class="menu-button"></ion-menu-button>
       </ion-buttons>
-      <ion-title class="title">VSS Application</ion-title>
+      <ion-title class="title">
+        VSS Application - {{ databaseDisplayName }}
+      </ion-title>
       <ion-buttons slot="end">
         <ion-button @click="logout" class="logout-button">Logout</ion-button>
       </ion-buttons>
@@ -13,7 +15,15 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import { IonButtons, IonHeader, IonMenuButton, IonTitle, IonToolbar, IonButton } from '@ionic/vue';
+
+const databaseDisplayName = ref('Unknown Database');
+
+onMounted(() => {
+  const displayName = localStorage.getItem('databaseDisplayName') || 'Unknown Database';
+  databaseDisplayName.value = displayName;
+});
 
 const logout = () => {
   // Remove the token from localStorage

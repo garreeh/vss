@@ -65,7 +65,7 @@ const caseId = ref(route.params.case_id); // Fetch case_id from route parameters
 //       return;
 //     }
 
-//     const response = await axios.post('http://192.168.100.111/IonicProject/vss/backend/petinfo/case_display.php', {
+//     const response = await axios.post('http://192.168.0.111/IonicProject/vss/backend/petinfo/case_display.php', {
 //       client_id: parseInt(clientId, 10),
 //       case_id: caseId.value
 //     });

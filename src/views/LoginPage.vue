@@ -61,6 +61,12 @@ const client_password = ref('');
 const loginMessage = ref('');
 const router = useRouter();
 
+const databaseNameMapping = {
+  'vssphcom_trial': 'Trial',
+  'vssphcom_pet911': 'Pet911',
+  'vssphcom_petish': 'Petish'
+};
+
 const login = async () => {
   try {
     const response = await loginProcess.login({
@@ -73,15 +79,20 @@ const login = async () => {
       const clientId = response.data.client_id;
       const clientFirstname = response.data.client_firstname;
       const clientLastname = response.data.client_lastname;
-      const databaseName = response.data.database_name; // New field
+      const databaseName = response.data.database_name; // Actual database name
 
+      // Store actual database name
       localStorage.setItem('authToken', token);
       localStorage.setItem('clientId', clientId);
       localStorage.setItem('clientFirstname', clientFirstname);
       localStorage.setItem('clientLastname', clientLastname);
-      localStorage.setItem('databaseName', databaseName); // Store database name
+      localStorage.setItem('databaseName', databaseName); // Store actual database name
 
-      window.location.href = '/home';
+      // Convert to user-friendly name and store it
+      const userFriendlyName = databaseNameMapping[databaseName] || 'Unknown Database';
+      localStorage.setItem('databaseDisplayName', userFriendlyName);
+
+      router.push('/home');
     } else {
       loginMessage.value = response.data.message;
     }
@@ -91,13 +102,13 @@ const login = async () => {
   }
 };
 
-const forgotPassword = () => {
-  window.location.href = '/forgot-password';
-};
+// const forgotPassword = () => {
+//   window.location.href = '/forgot-password';
+// };
 
-const newClient = () => {
-  window.location.href = '/register';
-};
+// const newClient = () => {
+//   window.location.href = '/register';
+// };
 
 </script>
 

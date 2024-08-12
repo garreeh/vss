@@ -4,6 +4,11 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
+// $password = 'test1005';
+// $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+// echo $hashedPassword;
+
 $data = json_decode(file_get_contents("php://input"), true);
 $client_email = isset($data['client_email']) ? $data['client_email'] : '';
 $client_password = isset($data['client_password']) ? $data['client_password'] : '';
@@ -11,7 +16,7 @@ $client_password = isset($data['client_password']) ? $data['client_password'] : 
 // Connection details for all databases
 $databases = [
     'pet911' => ['conn_file' => 'conn_pet911.php'],
-    'petish' => ['conn_file' => 'conn_petish.php'],
+    // 'petish' => ['conn_file' => 'conn_petish.php'],
     'trial' => ['conn_file' => 'conn_trial.php']
 ];
 
