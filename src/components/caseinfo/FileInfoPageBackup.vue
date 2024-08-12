@@ -80,7 +80,7 @@ const attachments = ref<Attachment[]>([]);
 const baseUrl = 'https://vssph.com/pet911/';
 
 // This is for debugging
-// const baseUrl = 'http://192.168.69.146/pet911/';
+// const baseUrl = 'http://192.168.100.111/pet911/';
 
 const route = useRoute();
 
@@ -90,7 +90,7 @@ const errorMessage = ref<string | null>(null);  // Add errorMessage state
 
 const fetchLaboratoryAttachments = async (caseId: number) => {
   try {
-    const response = await axios.post('http://192.168.69.146/IonicProject/vss/backend/attachments/laboratory_attachments.php', { case_id: caseId });
+    const response = await axios.post('http://192.168.100.111/IonicProject/vss/backend/attachments/laboratory_attachments.php', { case_id: caseId });
     if (response.data.status === 'success') {
       attachments.value = response.data.data;
     } else {

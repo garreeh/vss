@@ -48,7 +48,6 @@
       </ion-accordion>
     </ion-accordion-group>
 
-    <!-- Modal for Image Zoom -->
     <div v-if="isModalOpen" class="modal-overlay" @click="closeModal">
       <div class="modal-content" @click.stop>
         <img :src="currentImage" class="modal-image" />
@@ -147,7 +146,7 @@ const isImage = (filePath) => /\.(jpg|jpeg|png)$/i.test(filePath);
 const isPDF = (filePath) => /\.pdf$/i.test(filePath);
 const isDOCX = (filePath) => /\.docx$/i.test(filePath);
 const isMobile = () => /Mobi|Android/i.test(navigator.userAgent);
-
+ 
 onMounted(() => {
   const caseId = parseInt(route.params.case_id, 10);
   if (isNaN(caseId)) {

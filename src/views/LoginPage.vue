@@ -2,7 +2,7 @@
   <ion-content>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Login</ion-title>
+        <ion-title>VSS Application</ion-title>
       </ion-toolbar>
     </ion-header>
 
@@ -40,20 +40,7 @@
                 <p v-if="loginMessage" class="ion-text-center ion-margin-top">
                   {{ loginMessage }}
                 </p>
-                <ion-grid>
-                  <ion-row>
-                    <ion-col class="ion-text-start">
-                      <ion-button fill="clear" @click="forgotPassword">
-                        Forgot Password
-                      </ion-button>
-                    </ion-col>
-                    <ion-col class="ion-text-end">
-                      <ion-button fill="clear" @click="newClient">
-                        New Client
-                      </ion-button>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
+
               </form>
             </ion-card-content>
           </ion-card>
@@ -115,7 +102,9 @@ const newClient = () => {
 </script>
 
 <style scoped>
+
 .card-container {
   padding: 20px;
 }
+
 </style>

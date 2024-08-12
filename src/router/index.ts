@@ -6,7 +6,7 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/', redirect: '/login' },
   { path: '/login', component: () => import('../views/LoginPage.vue') },
   { path: '/register', component: () => import('../views/RegisterPage.vue') },
-  { path: '/forgot-password', component: () => import('../views/ForgotPassPage.vue') },
+  // { path: '/forgot-password', component: () => import('../views/ForgotPassPage.vue') },
   { path: '/home', component: () => import('../views/HomePage.vue') },
   
   // This is specific for Pet Page.
@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
   // This is for testing only.
   // console.log(`Navigating to: ${to.path}, Authenticated: ${authenticated}`);
 
-  const publicPages = ['/login', '/register', '/forgot-password'];
+  const publicPages = ['/login', /* You can add another here. */];
 
   if (!authenticated && !publicPages.includes(to.path)) {
     next('/login');
