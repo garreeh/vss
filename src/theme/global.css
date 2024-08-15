@@ -1,0 +1,43 @@
+/* src/styles/global.css */
+
+/* Basic reset for margin and padding */
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Basic styling */
+body {
+  font-family: Arial, sans-serif;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.ion-margin-top {
+  margin-top: 16px;
+}
+
+.card-container {
+  max-width: 60rem;
+  width: 100%;
+  margin: auto;
+}
+
+/* Card Styling */
+.ion-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.ion-card-title {
+  font-size: 1.5rem;
+}
+
+.ion-card-content {
+  padding: 20px;
+}

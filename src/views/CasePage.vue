@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import {  IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 import Header from './../components/Header.vue';
 
 </script>

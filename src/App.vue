@@ -95,15 +95,15 @@ const appPages = [
   //   iosIcon: personOutline,
   //   mdIcon: personSharp,
   // },
-  {
-    title: 'Setup',
-    iosIcon: settingsOutline,
-    mdIcon: settingsSharp,
-    subPages: [
-      { title: 'Preferences', url: '/setup/services', iosIcon: settingsOutline, mdIcon: settingsSharp },
-      { title: 'Account', url: '/setup/user', iosIcon: personOutline, mdIcon: personSharp },
-    ],
-  },
+  // {
+  //   title: 'Setup',
+  //   iosIcon: settingsOutline,
+  //   mdIcon: settingsSharp,
+  //   subPages: [
+  //     { title: 'Preferences', url: '/setup/services', iosIcon: settingsOutline, mdIcon: settingsSharp },
+  //     { title: 'Account', url: '/setup/user', iosIcon: personOutline, mdIcon: personSharp },
+  //   ],
+  // },
 ];
 
 const route = useRoute();
@@ -111,7 +111,7 @@ const router = useRouter();
 
 // Watch route changes to toggle sidebar visibility
 watchEffect(() => {
-  const shouldShowSidebar = !['/login', '/register', '/forgot-password'].includes(route.path);
+  const shouldShowSidebar = !['/', '/login', '/register', '/forgot-password'].includes(route.path);
   showSidebar.value = shouldShowSidebar;
 
   // This is for testing only.
@@ -158,15 +158,12 @@ const handleSubItemClick = (parentIndex, subIndex, url, event) => {
   router.push(url);
 };
 
+
 </script>
 
 <style scoped>
 .sub-item {
   padding-left: 2rem;
-}
-
-ion-menu ion-content {
-  --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }
 
 ion-menu.md ion-content {

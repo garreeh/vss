@@ -43,7 +43,10 @@
               </template>
             </div>
           </div>
-          <p v-else>No Attachments Available</p>
+
+          <div v-else class="no-pets">
+            <img src="./../../images/svg/no-data.svg" alt="No Pets" class="no-pets-svg" />
+          </div>
         </div>
       </ion-accordion>
     </ion-accordion-group>
@@ -75,9 +78,37 @@ const databaseName = localStorage.getItem('databaseName');
 
 // Base URL will now be dynamic depending on the database name
 const baseUrlMap = {
-  vssphcom_pet911: 'https://vssph.com/pet911/',
+  vssphcom_animed: 'https://vssph.com/animed/',
+  vssphcom_av_vet: 'https://vssph.com/avvet/',
+  vssphcom_betlehem: 'https://vssph.com/bethlehem/',
+  vssphcom_cebuvetcentral: 'https://vssph.com/cebuvetcentral/',
+  vssphcom_circleoflife: 'https://vssph.com/circleoflife/',
+  vssphcom_furpetsake: 'https://vssph.com/furpetsake/',
+  vssphcom_glittersparkle: 'https://vssph.com/glittersparkle/',
+  vssphcom_jollyvet: 'https://vssph.com/jollyvet/',
+  vssphcom_lafurry: 'https://vssph.com/lafurrypaws/',
+  vssphcom_northeastvetclinic: 'https://vssph.com/northeastvetclinic/',
+  vssphcom_panacea: 'https://vssph.com/panacea/',
+  vssphcom_pawprints: 'https://vssph.com/pawprints/',
+  vssphcom_pet911: 'https://vssph.com/pet911',
+  vssphcom_pet911camarin: 'https://vssph.com/pet911_camarin/',
+  vssphcom_pethelp: 'https://vssph.com/pethelp/',
   vssphcom_petish: 'https://vssph.com/petish/',
-  vssphcom_trial: 'https://vssph.com/trial/'
+  vssphcom_petlandia: 'https://vssph.com/petlandia/',
+  vssphcom_petlife: 'https://vssph.com/petlife/',
+  vssphcom_petstacular: 'https://vssph.com/petstacular/',
+  vssphcom_petwell: 'https://vssph.com/petwell/',
+  vssphcom_petworx: 'https://vssph.com/petworx/',
+  vssphcom_primevet: 'https://vssph.com/primevet/',
+  vssphcom_thecat: 'https://vssph.com/thecatclinic/',
+  vssphcom_trial: 'https://vssph.com/trial/',
+  vssphcom_vetcorner: 'https://vssph.com/vetcorner/',
+  vssphcom_vetcornervc: 'https://vssph.com/vetcorner_imus/',
+  vssphcom_veterinarius: 'https://vssph.com/veterinarius/',
+  vssphcom_vetlink: 'https://vssph.com/vetlink/',
+  vssphcom_vetsquare: 'https://vssph.com/vetsquare/',
+  'vssphcom_vet_clinicdr.e': 'https://vssph.com/drevetclinic/',
+  vssphcom_wt_animal: 'https://vssph.com/wtclinic/',
 };
 
 // Get the corresponding base URL
@@ -180,15 +211,27 @@ onMounted(() => {
   text-decoration: none;
 }
 
+.no-pets-svg {
+  margin-bottom: 10px;
+  pointer-events: none; /* Prevents clicking */
+}
+
 @media (min-width: 768px) {
   .three-columns {
     column-count: 3;
+  }
+
+  .no-pets-svg {
+    width: 35rem; /* Adjust size for larger screens */
   }
 }
 
 @media (min-width: 1024px) {
   .three-columns {
     column-count: 3;
+  }
+  .no-pets-svg {
+    width: 35rem; /* Adjust size for larger screens */
   }
 }
 

@@ -12,8 +12,8 @@
       <div id="container">
         <div>
           <ion-avatar>
-            <img src="./../images/avatar.webp" alt="Pet Avatar"/>
-            <ion-label class="verified-label">PET PAGE</ion-label>
+            <img src="./../images/svg/cat-and-dog.svg" alt="Pet Avatar"/>
+            <ion-label class="verified-label">Verified Pet</ion-label>
           </ion-avatar>
         </div>
 
@@ -71,8 +71,8 @@ const petName = ref(decodeURIComponent(route.params.petName as string));
 
 #container ion-avatar {
   display: inline-block;
-  width: 100px;
-  height: 100px;
+  width: 10rem;
+  height: 8rem;
 }
 
 #container ion-avatar img {
@@ -110,8 +110,8 @@ const petName = ref(decodeURIComponent(route.params.petName as string));
   }
 
   #container ion-avatar {
-    width: 150px;
-    height: 150px;
+    width: 10rem;
+    height: 8rem;
   }
 
   #container ion-label.verified-label {
@@ -136,8 +136,8 @@ const petName = ref(decodeURIComponent(route.params.petName as string));
   }
 
   #container ion-avatar {
-    width: 100px;
-    height: 100px;
+    width: 10rem;
+    height: 8rem;
   }
 
   #container ion-label.verified-label {

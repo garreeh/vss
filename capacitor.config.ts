@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'VSS',
   webDir: 'dist',
   server: {
-    url: 'http://192.168.0.111:8100',
+    url: 'https://vssph.com/',
     cleartext: true
   }
 };

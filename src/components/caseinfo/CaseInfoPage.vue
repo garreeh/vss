@@ -47,10 +47,6 @@
             </div>
             <div class="pet-details">
               <div class="pet-detail full-width centered">
-                <p class="label">Differential:</p>
-                <p class="value">{{ pet.case_differential || 'No Details' }}</p>
-              </div>
-              <div class="pet-detail full-width centered">
                 <p class="label">Clinical Symptoms:</p>
                 <p class="value">{{ pet.case_clinical_symptoms || 'No Details' }}</p>
               </div>
@@ -67,10 +63,6 @@
                 <p class="value">{{ pet.treatment || 'No Details' }}</p>
               </div>
               <div class="pet-detail full-width centered">
-                <p class="label">Working Diagnose:</p>
-                <p class="value">{{ pet.working_diagnose || 'No Details' }}</p>
-              </div>
-              <div class="pet-detail full-width centered">
                 <p class="label">Prescription:</p>
                 <ul class="value">
                   <li v-for="(item, idx) in pet.prescription.split('\r\n')" :key="idx">
@@ -82,10 +74,6 @@
           </ion-label>
         </ion-item>
       </ion-card>
-    </div>
-    <!-- Show a message if there are no pets -->
-    <div v-else class="no-details">
-      <p>No Details Available</p>
     </div>
   </div>
 </template>

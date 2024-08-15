@@ -21,8 +21,7 @@ import '@ionic/vue/css/text-alignment.css';
 import '@ionic/vue/css/text-transformation.css';
 import '@ionic/vue/css/flex-utils.css';
 import '@ionic/vue/css/display.css';
-import './styles/global.css';
-import './styles/responsive.css';
+
 
 /**
  * Ionic Dark Mode
@@ -35,8 +34,10 @@ import './styles/responsive.css';
 /* @import '@ionic/vue/css/palettes/dark.class.css'; */
 // import '@ionic/vue/css/palettes/dark.system.css';
 
-/* Theme variables */
-import './theme/variables.css';
+/* CSS Variables */
+import './theme/variables.scss';
+import './theme/global.css';
+import './theme/responsive.css';
 
 const app = createApp(App)
   .use(IonicVue)

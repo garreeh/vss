@@ -1,7 +1,10 @@
 <template>
   <div class="info-page">
+    <div v-if="loading" class="loading">
+      <p>Loading...</p>
+    </div>
     <!-- Check if there are any pets -->
-    <div v-if="pets.length > 0" class="pets-list">
+    <div v-else-if="pets.length > 0" class="pets-list">
       <ion-card
         v-for="(pet, index) in pets"
         :key="index"
@@ -19,9 +22,8 @@
       </ion-card>
     </div>
 
-    <!-- Show a message if there are no pets -->
     <div v-else class="no-cases-message">
-      <p>No cases found for this patient.</p>
+      <img src="./../../images/svg/no-data.svg" alt="No Pets" class="no-pets-svg" />
     </div>
   </div>
 </template>
@@ -36,6 +38,7 @@ import { IonLabel, IonIcon, IonCard, IonItem } from '@ionic/vue';
 // Data references
 const pets = ref([]);
 const route = useRoute();
+const loading = ref(true); // Add a loading state
 
 const fetchDataAndDisplay = async () => {
   try {
@@ -45,6 +48,7 @@ const fetchDataAndDisplay = async () => {
 
     if (!clientId || !databaseName || !petName) {
       console.error('Client ID, database name, or pet name is missing.');
+      loading.value = false; // Stop loading if data cannot be fetched
       return;
     }
 
@@ -57,8 +61,11 @@ const fetchDataAndDisplay = async () => {
     } else {
       console.error('Error:', response.data.message);
     }
+    
   } catch (error) {
     console.error('Error fetching data:', error);
+  } finally {
+    loading.value = false; // Stop loading regardless of success or failure
   }
 };
 
@@ -84,6 +91,7 @@ onMounted(() => {
   width: 100%;
   max-width: 600px;
   margin-bottom: 10px;
+  cursor: pointer; /* Makes the cursor clickable */
 }
 
 .pet-item {
@@ -102,6 +110,17 @@ onMounted(() => {
   color: #666;
 }
 
+.no-pets {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.no-pets-svg {
+  margin-bottom: 10px;
+  pointer-events: none; /* Prevents clicking */
+}
+
 @media (min-width: 768px) {
   .info-page {
     padding: 30px;
@@ -109,6 +128,10 @@ onMounted(() => {
 
   .pet-name {
     font-size: 18px;
+  }
+
+  .no-pets-svg {
+    width: 35rem; /* Adjust size for larger screens */
   }
 }
 
@@ -119,6 +142,10 @@ onMounted(() => {
 
   .pet-name {
     font-size: 20px;
+  }
+
+  .no-pets-svg {
+    width: 35rem; /* Adjust size for larger screens */
   }
 }
 </style>

@@ -12,8 +12,8 @@
       <div id="container">
         <div>
           <ion-avatar>
-            <img src="./../images/avatar.webp" alt="Client Avatar"/>
-            <ion-label class="verified-label">Verified</ion-label>
+            <img src="./../images/svg/user.svg" alt="Client Avatar"/>
+            <ion-label class="verified-label">Verified Client</ion-label>
           </ion-avatar>
         </div>
 
@@ -38,19 +38,21 @@
           <PetDashboard :title="$route.params.id" />
         </div>
         <div v-if="selectedSegment === 'bill'">
-          <!-- Content for Bill -->
-          <p>Client Billing Details...</p>
+          <BillingPage :title="$route.params.id" />
         </div>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
+
 <script setup>
 import { ref, onMounted } from 'vue';
 import Header from './../components/Header.vue';
 import Information from './../components/clientinfo/InfoPage.vue';
 import PetDashboard from './../components/clientinfo/PetsDashboardPage.vue';
+import BillingPage from './../components/clientinfo/BillPage.vue';
+
 
 import { IonLabel, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonAvatar, IonSegmentButton, IonSegment } from '@ionic/vue';
 

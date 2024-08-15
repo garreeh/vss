@@ -1,30 +1,33 @@
 <template>
   <div class="info-page">
-    <div class="info-item">
-      <ul class="info-list">
-        <li>
-          <span class="label">Address:</span>
-          <span class="data">{{ address }}</span>
-        </li>
-        <li>
-          <span class="label">Email:</span>
-          <span class="data">{{ email }}</span>
-        </li>
-        <li>
-          <span class="label">Mobile:</span>
-          <span class="data">{{ mobile }}</span>
-        </li>
-        <li>
-          <span class="label">Telephone:</span>
-          <span class="data">{{ telephone }}</span>
-        </li>
-      </ul>
-    </div>
+    <ion-card class="info-card">
+      <ion-card-content>
+        <ul class="info-list">
+          <li>
+            <span class="label">Address:</span>
+            <span class="data">{{ address }}</span>
+          </li>
+          <li>
+            <span class="label">Email:</span>
+            <span class="data">{{ email }}</span>
+          </li>
+          <li>
+            <span class="label">Mobile:</span>
+            <span class="data">{{ mobile }}</span>
+          </li>
+          <li>
+            <span class="label">Telephone:</span>
+            <span class="data">{{ telephone }}</span>
+          </li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/vue';
 import apiService from './../../apiServices/apiService.js';
 
 // Data references
@@ -52,6 +55,7 @@ const fetchDataAndDisplay = async () => {
       email.value = client_email || 'No Email Provided';
       mobile.value = client_mobile || 'No Mobile Phone Provided';
       telephone.value = client_home || 'No Telephone Provided';
+
     } else {
       console.error('Error:', response.data.message);
     }
@@ -68,64 +72,58 @@ onMounted(() => {
 
 <style scoped>
 .info-page {
-  padding: 20px;
-  text-align: left;
+  display: flex;
+  justify-content: center;
+  padding: 16px;
 }
 
-.info-page h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
+.info-card {
+  width: 100%;
+  max-width: 600px;
+}
+
+ion-card-header {
+  background-color: var(--ion-color-primary);
+  color: white;
+}
+
+ion-card-title {
+  font-size: 1.5rem;
 }
 
 .info-list {
-  list-style: none;
+  list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .info-list li {
   display: flex;
-  margin-bottom: 15px;
-  padding: 5px 0;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #ccc;
 }
 
-.info-list .label {
-  flex: 1;
+.label {
   font-weight: bold;
 }
 
-.info-list .data {
-  flex: 2;
+.data {
+  text-align: right;
+  color: var(--ion-color-dark);
 }
 
 @media (min-width: 768px) {
-  .info-page {
-    padding: 30px;
-  }
-
-  .info-page h2 {
-    font-size: 28px;
-  }
-
-  .info-list .label, .info-list .data {
-    font-size: 18px;
+  .info-card {
+    padding: 24px;
   }
 
   .info-list li {
-    margin-bottom: 20px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .info-page {
-    padding: 50px;
+    padding: 12px 0;
   }
 
-  .info-page h2 {
-    font-size: 32px;
-  }
-
-  .info-list .label, .info-list .data {
-    font-size: 20px;
+  ion-card-title {
+    font-size: 2rem;
   }
 }
 </style>

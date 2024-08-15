@@ -5,7 +5,7 @@
         <ion-menu-button color="primary" class="menu-button"></ion-menu-button>
       </ion-buttons>
       <ion-title class="title">
-        VSS Application - {{ databaseDisplayName }}
+        {{ databaseDisplayName }}
       </ion-title>
       <ion-buttons slot="end">
         <ion-button @click="logout" class="logout-button">Logout</ion-button>
@@ -31,9 +31,12 @@ const logout = () => {
   localStorage.removeItem('clientId');
   localStorage.removeItem('clientFirstname');
   localStorage.removeItem('clientLastname');
-  
-  // Redirect to login page
+
+  // For debugging
   window.location.href = '/login';
+
+  // For Production
+  // window.location.href = '/ionic/dist';
 };
 </script>
 

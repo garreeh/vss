@@ -12,8 +12,8 @@
       <div id="container">
         <div>
           <ion-avatar>
-            <img src="./../../images/avatar.webp" alt="Pet Avatar"/>
-            <ion-label class="verified-label">PET CASE</ion-label>
+            <img src="./../../images/svg/cat-and-dog.svg" alt="Pet Avatar"/>
+            <ion-label class="verified-label">Case for Pet</ion-label>
           </ion-avatar>
         </div>
 
@@ -40,13 +40,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, } from 'vue';
 import { useRoute } from 'vue-router';
 import { IonLabel, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonAvatar, IonSegmentButton, IonSegment } from '@ionic/vue';
 import Header from './../../components/Header.vue';
 import CaseInformation from './../../components/caseinfo/CaseInfoPage.vue';
 import FileCases from './../../components/caseinfo/FileInfoPage.vue';
-import axios from 'axios';
 
 const selectedSegment = ref('PetInfo');
 
@@ -54,38 +53,7 @@ const patientName = ref('');
 
 // Route parameters
 const route = useRoute();
-const caseId = ref(route.params.case_id); // Fetch case_id from route parameters
 
-// const fetchDataAndDisplay = async () => {
-//   try {
-//     const clientId = localStorage.getItem('clientId');
-    
-//     if (!clientId) {
-//       console.error('Client ID is missing.');
-//       return;
-//     }
-
-//     const response = await axios.post('http://192.168.0.111/IonicProject/vss/backend/petinfo/case_display.php', {
-//       client_id: parseInt(clientId, 10),
-//       case_id: caseId.value
-//     });
-
-//     if (response.data.status === 'success') {
-//       const { patient_name } = response.data.data[0]; // Access patient_name from the first result
-//       patientName.value = patient_name || 'No Details';
-//       console.log(patientName.value);
-//     } else {
-//       console.error('Error:', response.data.message);
-//     }
-//   } catch (error) {
-//     console.error('Error fetching data:', error);
-//   }
-// };
-
-// // Fetch data when component is mounted
-// onMounted(() => {
-//   fetchDataAndDisplay();
-// });
 </script>
 
 <style scoped>
@@ -96,8 +64,8 @@ const caseId = ref(route.params.case_id); // Fetch case_id from route parameters
 
 #container ion-avatar {
   display: inline-block;
-  width: 100px;
-  height: 100px;
+  width: 10rem;
+  height: 8rem;
 }
 
 #container ion-avatar img {
@@ -135,8 +103,8 @@ const caseId = ref(route.params.case_id); // Fetch case_id from route parameters
   }
 
   #container ion-avatar {
-    width: 150px;
-    height: 150px;
+    width: 10rem;
+    height: 8rem;
   }
 
   #container ion-label.verified-label {
@@ -161,8 +129,8 @@ const caseId = ref(route.params.case_id); // Fetch case_id from route parameters
   }
 
   #container ion-avatar {
-    width: 100px;
-    height: 100px;
+    width: 10rem;
+    height: 8rem;
   }
 
   #container ion-label.verified-label {

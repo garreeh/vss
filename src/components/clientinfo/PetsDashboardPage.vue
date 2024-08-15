@@ -1,6 +1,12 @@
 <template>
   <div class="info-page">
-    <div v-if="pets.length > 0" class="pets-list">
+    <!-- Show loading indicator while data is being fetched -->
+    <div v-if="loading" class="loading">
+      <p>Loading...</p>
+    </div>
+    
+    <!-- Show pets list if there are pets -->
+    <div v-else-if="pets.length > 0" class="pets-list">
       <ion-card v-for="(pet, index) in pets" :key="index" class="info-item" @click="goToPetDetails(pet)">
         <ion-item lines="none" class="pet-item">
           <ion-icon :icon="pawSharp" class="pet-icon"></ion-icon>
@@ -10,7 +16,11 @@
         </ion-item>
       </ion-card>
     </div>
-    <!-- <p v-else>No pets found for this client.</p> -->
+    
+    <!-- Show no pets message if there are no pets -->
+    <div v-else class="no-pets">
+      <img src="./../../images/svg/no-data.svg" alt="No Pets" class="no-pets-svg" />
+    </div>
   </div>
 </template>
 
@@ -21,7 +31,8 @@ import { pawSharp } from 'ionicons/icons';
 import { IonLabel, IonIcon, IonCard, IonItem } from '@ionic/vue';
 
 // Data references
-const pets = ref([]); // No type annotations here
+const pets = ref([]);
+const loading = ref(true); // Add a loading state
 
 const fetchDataAndDisplay = async () => {
   try {
@@ -30,6 +41,7 @@ const fetchDataAndDisplay = async () => {
     
     if (!clientId || !databaseName) {
       console.error('Client ID or database name is missing in local storage.');
+      loading.value = false; // Stop loading if data cannot be fetched
       return;
     }
     
@@ -41,13 +53,18 @@ const fetchDataAndDisplay = async () => {
     }
   } catch (error) {
     console.error('Error fetching data:', error);
+  } finally {
+    loading.value = false; // Stop loading regardless of success or failure
   }
 };
 
 const goToPetDetails = (pet) => {
   // Construct the URL using the pet's name
   const petName = encodeURIComponent(pet.patient_name);
+
+  //Production
   const url = `/pet-details/${petName}`;
+
 
   // This is for testing only
   // console.log(url)
@@ -95,6 +112,17 @@ onMounted(() => {
   color: #666;
 }
 
+.no-pets {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.no-pets-svg {
+  margin-bottom: 10px;
+  pointer-events: none; /* Prevents clicking */
+}
+
 @media (min-width: 768px) {
   .info-page {
     padding: 30px;
@@ -102,6 +130,10 @@ onMounted(() => {
 
   .pet-name {
     font-size: 18px;
+  }
+
+  .no-pets-svg {
+    width: 35rem; /* Adjust size for larger screens */
   }
 }
 
@@ -113,5 +145,10 @@ onMounted(() => {
   .pet-name {
     font-size: 20px;
   }
+
+  .no-pets-svg {
+    width: 35rem; /* Adjust size for larger screens */
+  }
 }
 </style>
+

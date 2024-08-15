@@ -4,20 +4,43 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-// $password = 'test1005';
-// $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-// echo $hashedPassword;
-
 $data = json_decode(file_get_contents("php://input"), true);
 $client_email = isset($data['client_email']) ? $data['client_email'] : '';
 $client_password = isset($data['client_password']) ? $data['client_password'] : '';
 
 // Connection details for all databases
 $databases = [
+    'animed' => ['conn_file' => 'conn_animed.php'],
+    'avvet' => ['conn_file' => 'conn_av_vet.php'],
+    'betlehem' => ['conn_file' => 'conn_betlehem.php'],
+    'cebuvetcentral' => ['conn_file' => 'conn_cebuvetcentral.php'],
+    'circleoflife' => ['conn_file' => 'conn_circleoflife.php'],
+    'dre' => ['conn_file' => 'conn_dre.php'],
+    'furpetsake' => ['conn_file' => 'conn_furpetsake.php'],
+    'glittersparkle' => ['conn_file' => 'conn_glittersparkle.php'],
+    'jollyvet' => ['conn_file' => 'conn_jollyvet.php'],
+    'northeastvetclinic' => ['conn_file' => 'conn_northeastvetclinic.php'],
+    'panacea' => ['conn_file' => 'conn_panacea.php'],
+    'pawprints' => ['conn_file' => 'conn_pawprints.php'],
     'pet911' => ['conn_file' => 'conn_pet911.php'],
+    'pet911camarin' => ['conn_file' => 'conn_pet911camarin.php'],
+    'pethelp' => ['conn_file' => 'conn_pethelp.php'],
     'petish' => ['conn_file' => 'conn_petish.php'],
-    'trial' => ['conn_file' => 'conn_trial.php']
+    'petlandia' => ['conn_file' => 'conn_petlandia.php'],
+    'petlife' => ['conn_file' => 'conn_petlife.php'],
+    'petstacular' => ['conn_file' => 'conn_petstacular.php'],
+    'petwell' => ['conn_file' => 'conn_petwell.php'],
+    'petworx' => ['conn_file' => 'conn_petworx.php'],
+    'prinmevet' => ['conn_file' => 'conn_primevet.php'],
+    'thecat' => ['conn_file' => 'conn_thecat.php'],
+    'trial' => ['conn_file' => 'conn_trial.php'],
+    'vetcorner' => ['conn_file' => 'conn_vetcorner.php'],
+    'vetcornervc' => ['conn_file' => 'conn_vetcornervc.php'],
+    'veterinarius' => ['conn_file' => 'conn_veterinarius.php'],
+    'vetlink' => ['conn_file' => 'conn_vetlink.php'],
+    'vetsquare' => ['conn_file' => 'conn_vetsquare.php'],
+    'wtclinic' => ['conn_file' => 'conn_wtclinic.php'],
+    'lafurry' => ['conn_file' => 'conn_lafurry.php'],
 ];
 
 $found = false;

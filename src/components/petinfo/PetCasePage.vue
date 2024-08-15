@@ -1,7 +1,11 @@
 <template>
   <div class="info-page">
-    <!-- Check if there are any pets -->
-    <div v-if="pets.length > 0" class="pets-list">
+
+    <div v-if="loading" class="loading">
+      <p>Loading...</p>
+    </div>
+
+    <div v-else-if="pets.length > 0" class="pets-list">
       <ion-card
         v-for="(pet, index) in pets"
         :key="index"
@@ -21,10 +25,9 @@
       </ion-card>
     </div>
 
-    <!-- Show a message if there are no pets -->
-    <!-- <div v-else class="no-cases-message">
-      <p>No cases found for this patient.</p>
-    </div> -->
+    <div v-else class="no-cases-message">
+      <img src="./../../images/svg/no-data.svg" alt="No Pets" class="no-pets-svg" />
+    </div>
   </div>
 </template>
 
@@ -39,6 +42,7 @@ import { IonLabel, IonIcon, IonCard, IonItem } from '@ionic/vue';
 const pets = ref([]);
 const route = useRoute(); // Use this if you need access to route parameters
 const router = useRouter(); // Use this for navigation
+const loading = ref(true); // Add a loading state
 
 const fetchDataAndDisplay = async () => {
   try {
@@ -47,9 +51,9 @@ const fetchDataAndDisplay = async () => {
 
     if (!clientId || !databaseName) {
       console.error('Client ID, database name, or Case ID is missing.');
+      loading.value = false; // Stop loading if data cannot be fetched
       return;
     }
-
     // Fetch pet details
     const response = await apiService.fetchCaseData(clientId, databaseName);
 
@@ -58,8 +62,11 @@ const fetchDataAndDisplay = async () => {
     } else {
       console.error('Error:', response.data.message);
     }
+
   } catch (error) {
     console.error('Error fetching data:', error);
+  } finally {
+    loading.value = false; // Stop loading regardless of success or failure
   }
 };
 
@@ -71,6 +78,7 @@ onMounted(() => {
 const goToCaseDetails = (pet) => {
   // Construct the URL using the pet's case_id
   const petCase = encodeURIComponent(pet.case_id);
+  // Debugging
   const url = `/case-details/${petCase}`;
 
   // Navigate to the case details page
@@ -113,6 +121,17 @@ const goToCaseDetails = (pet) => {
   color: #666;
 }
 
+.no-pets {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.no-pets-svg {
+  margin-bottom: 10px;
+  pointer-events: none; /* Prevents clicking */
+}
+
 @media (min-width: 768px) {
   .info-page {
     padding: 30px;
@@ -120,6 +139,10 @@ const goToCaseDetails = (pet) => {
 
   .pet-name {
     font-size: 18px;
+  }
+
+  .no-pets-svg {
+    width: 35rem; /* Adjust size for larger screens */
   }
 }
 
@@ -130,6 +153,10 @@ const goToCaseDetails = (pet) => {
 
   .pet-name {
     font-size: 20px;
+  }
+
+  .no-pets-svg {
+    width: 35rem; /* Adjust size for larger screens */
   }
 }
 </style>
