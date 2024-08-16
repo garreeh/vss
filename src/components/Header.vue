@@ -12,13 +12,24 @@
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
+
+  <!-- Loader -->
+  <ion-loading
+    :is-open="loading"
+    message="Logging out..."
+    spinner="crescent"
+  ></ion-loading>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted } from 'vue';
-import { IonButtons, IonHeader, IonMenuButton, IonTitle, IonToolbar, IonButton } from '@ionic/vue';
+import { IonButtons, IonHeader, IonMenuButton, IonTitle, IonToolbar, IonButton, IonLoading } from '@ionic/vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const databaseDisplayName = ref('Unknown Database');
+const loading = ref(false); // State for loader
+const router = useRouter(); // Use this for navigation
+
 
 onMounted(() => {
   const displayName = localStorage.getItem('databaseDisplayName') || 'Unknown Database';
@@ -26,19 +37,26 @@ onMounted(() => {
 });
 
 const logout = () => {
-  // Remove the token from localStorage
-  localStorage.removeItem('authToken');
-  localStorage.removeItem('clientId');
-  localStorage.removeItem('clientFirstname');
-  localStorage.removeItem('clientLastname');
+  loading.value = true; // Show loader
 
-  // For debugging
-  window.location.href = '/login';
+  setTimeout(() => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('clientId');
+    localStorage.removeItem('clientFirstname');
+    localStorage.removeItem('clientLastname');
+    localStorage.removeItem('databaseDisplayName');
+    localStorage.removeItem('databaseName');
 
-  // For Production
-  // window.location.href = '/ionic/dist';
+    const url = `/login`;
+
+    // Navigate to the case details page
+    router.push(url);
+
+    loading.value = false; // Hide loader
+  }, 1000); // Simulate a delay for logout process
 };
 </script>
+
 
 <style scoped>
 /* Header styling */

@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <Header :title="$route.params.case_id" />
+    <Header />
 
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">

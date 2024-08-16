@@ -1,10 +1,5 @@
 <template>
   <ion-content>
-    <!-- <ion-header>
-      <ion-toolbar>
-        <ion-title>VSS Application</ion-title>
-      </ion-toolbar>
-    </ion-header> -->
     <ion-grid class="card-container">
       <ion-row class="ion-justify-content-center">
         <ion-col size="12" md="8">
@@ -25,25 +20,23 @@
             <ion-card-content>
               <form @submit.prevent="login">
                 <!-- Input Email Address -->
-                  <ion-input
-                    :value="client_email"
-                    @ionInput="e => client_email = e.target.value"
-                    @keyup.enter="login"
-                    label="Email Address" label-placement="floating" fill="outline" placeholder="Enter your email address"
-                  ></ion-input>
-                  <br>
+                <ion-input
+                  :value="client_email"
+                  @ionInput="e => client_email = e.target.value"
+                  @keyup.enter="login"
+                  label="Email Address" label-placement="floating" fill="outline" placeholder="Enter your email address"
+                ></ion-input>
+                <br>
                 <!-- Input password -->
-                  <ion-input
-                    :type="showPassword ? 'text' : 'password'"
-                    :value="client_password"
-                    @ionInput="e => client_password = e.target.value"
-                    @keyup.enter="login"
-                    label="Password" label-placement="stacked" fill="outline" placeholder="Enter your password"
-                  >
-                    <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-                
-                  </ion-input>
-
+                <ion-input
+                  :type="showPassword ? 'text' : 'password'"
+                  :value="client_password"
+                  @ionInput="e => client_password = e.target.value"
+                  @keyup.enter="login"
+                  label="Password" label-placement="stacked" fill="outline" placeholder="Enter your password"
+                >
+                  <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+                </ion-input>
 
                 <ion-button shape="round" expand="full" type="submit" class="ion-margin-top">
                   Login
@@ -51,13 +44,15 @@
                 <p v-if="loginMessage" class="ion-text-center ion-margin-top">
                   {{ loginMessage }}
                 </p>
-
               </form>
             </ion-card-content>
           </ion-card>
         </ion-col>
       </ion-row>
     </ion-grid>
+
+    <!-- Loader -->
+    <ion-loading :is-open="isLoading" message="Logging in..." spinner="crescent"></ion-loading>
   </ion-content>
 </template>
 
@@ -65,11 +60,12 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import loginProcess from './../apiServices/loginProcess';
-import { IonCard, IonInputPasswordToggle, IonCardHeader, IonInput, IonItem, IonCol, IonRow, IonGrid, IonCardContent, IonContent, IonTitle, IonToolbar, IonButton, IonIcon } from '@ionic/vue';
+import { IonCard, IonInputPasswordToggle, IonCardHeader, IonInput, IonItem, IonCol, IonRow, IonGrid, IonCardContent, IonContent, IonTitle, IonToolbar, IonButton, IonIcon, IonLoading } from '@ionic/vue';
 
 const client_email = ref('');
 const client_password = ref('');
 const loginMessage = ref('');
+const isLoading = ref(false); // Loader state
 const router = useRouter();
 const showPassword = ref(false); // State for showing password
 
@@ -105,11 +101,11 @@ const databaseNameMapping = {
   'vssphcom_vetsquare': 'VetSquare',
   'vssphcom_vet_clinicdr.e': 'Dr. E Vet Clinic',
   'vssphcom_wt_animal': 'WT Animal',
-
-  
 };
 
 const login = async () => {
+  isLoading.value = true; // Show loader
+
   try {
     const response = await loginProcess.login({
       client_email: client_email.value,
@@ -134,20 +130,20 @@ const login = async () => {
       const userFriendlyName = databaseNameMapping[databaseName] || 'Unknown Database';
       localStorage.setItem('databaseDisplayName', userFriendlyName);
 
-      router.push('/home');
+      router.push('/home'); // Navigate to home page
     } else {
       loginMessage.value = response.data.message;
     }
   } catch (error) {
     console.error('Login error:', error);
     loginMessage.value = 'Network Error. Please Try Again.';
+  } finally {
+    isLoading.value = false; // Hide loader
   }
 };
-
 </script>
 
 <style scoped>
-
 /* The background is called in variables.scss */
 ion-content {
   --background: var(--ion-content-background-image);
@@ -168,16 +164,15 @@ ion-content {
 
 ion-card {
   --background: #eaF4F4;
-  /* --color: #9efff0; */
 }
 
 .card-container {
-
   height: 100%; /* Ensure the grid takes full height */
   display: flex;
   flex-direction: column;
   justify-content: center; /* Center content vertically */
 }
+
 .icon-col {
   display: flex;
   justify-content: center;

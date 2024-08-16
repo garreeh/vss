@@ -75,3 +75,16 @@ To secure your site with HTTPS, you can enable SSL through Bluehost’s control 
 Once deployed, you may want to monitor your website’s performance using tools like Google Analytics and optimize loading times with caching strategies provided by Bluehost.
 
 By following these steps, you should be able to successfully deploy your Ionic application to Bluehost.
+
+
+To Build in Release App in APK
+
+npx cap sync
+cd android > ./gradlew assembleRelease
+
+
+RUN LOCALLY
+
+ionic serve = with web server only
+
+ionic capacitor run android -l --external = with android phone

@@ -1,27 +1,45 @@
 <template>
   <div class="info-page">
+    <!-- Loader while data is being fetched -->
     <div v-if="loading" class="loading">
       <p>Loading...</p>
     </div>
-    <!-- Check if there are any pets -->
-    <div v-else-if="pets.length > 0" class="pets-list">
+
+    <!-- Pets list -->
+    <div v-else-if="pets.length > 0" class="details-card">
       <ion-card
         v-for="(pet, index) in pets"
         :key="index"
         class="info-item"
       >
-        <ion-item lines="none" class="pet-item">
-          <ion-icon :icon="pawSharp" class="pet-icon"></ion-icon>
-          <ion-label>
-            <p class="pet-name">Brand: {{ pet.brand || 'No Details' }}</p>
-            <p class="pet-name">Vaccine Date: {{ pet.date_vaccine || 'No Details' }}</p>
-            <p class="pet-name">Vaccine Expiration: {{ pet.expiration || 'No Details' }}</p>
-            <p class="pet-name">Deworm: {{ pet.deworming || 'No Details' }}</p>
+        <ion-item lines="none" class="info-item-content">
+          <ion-label class="info-details">
+            <div class="info-detail">
+              <ion-icon :icon="pawSharp" class="detail-icon"></ion-icon>
+              <span class="detail-text">Brand:</span>
+              <span class="detail-data">{{ pet.brand || 'No Details' }}</span>
+            </div>
+            <div class="info-detail">
+              <ion-icon :icon="calendarOutline" class="detail-icon"></ion-icon>
+              <span class="detail-text">Vaccine Date:</span>
+              <span class="detail-data">{{ pet.date_vaccine || 'No Details' }}</span>
+            </div>
+            <div class="info-detail">
+              <ion-icon :icon="calendarOutline" class="detail-icon"></ion-icon>
+              <span class="detail-text">Vaccine Expiration:</span>
+              <span class="detail-data">{{ pet.expiration || 'No Details' }}</span>
+            </div>
+            <div class="info-detail">
+              <ion-icon :icon="checkmarkDoneOutline" class="detail-icon"></ion-icon>
+              <span class="detail-text">Deworm:</span>
+              <span class="detail-data">{{ pet.deworming || 'No Details' }}</span>
+            </div>
           </ion-label>
         </ion-item>
       </ion-card>
     </div>
 
+    <!-- No pets message -->
     <div v-else class="no-cases-message">
       <img src="./../../images/svg/no-data.svg" alt="No Pets" class="no-pets-svg" />
     </div>
@@ -31,33 +49,30 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import apiService from './../../apiServices/apiService.js';
-import { useRouter, useRoute } from 'vue-router';
-import { pawSharp } from 'ionicons/icons';
+import { useRoute } from 'vue-router';
+import { pawSharp, calendarOutline, checkmarkDoneOutline } from 'ionicons/icons';
 import { IonLabel, IonIcon, IonCard, IonItem } from '@ionic/vue';
 
-// Data references
 const pets = ref([]);
 const route = useRoute();
-const loading = ref(true); // Add a loading state
+const loading = ref(true);
 
 const fetchDataAndDisplay = async () => {
   try {
     const clientId = localStorage.getItem('clientId');
     const databaseName = localStorage.getItem('databaseName');
-    const petName = route.params.petName; // Get petName from route params
+    const petName = route.params.petName;
 
     if (!clientId || !databaseName || !petName) {
       console.error('Client ID, database name, or pet name is missing.');
-      loading.value = false; // Stop loading if data cannot be fetched
+      loading.value = false;
       return;
     }
 
     const response = await apiService.fetchVaccineData(clientId, databaseName, petName);
 
-    console.log(response);
-
     if (response.data.status === 'success') {
-      pets.value = response.data.data; // Handle array of pets
+      pets.value = response.data.data;
     } else {
       console.error('Error:', response.data.message);
     }
@@ -65,11 +80,10 @@ const fetchDataAndDisplay = async () => {
   } catch (error) {
     console.error('Error fetching data:', error);
   } finally {
-    loading.value = false; // Stop loading regardless of success or failure
+    loading.value = false;
   }
 };
 
-// Fetch data when component is mounted
 onMounted(() => {
   fetchDataAndDisplay();
 });
@@ -77,61 +91,68 @@ onMounted(() => {
 
 <style scoped>
 .info-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 15px;
-  text-align: center;
 }
 
-.pets-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.details-card {
+  width: 100%;
+  max-width: 600px;
 }
 
 .info-item {
-  width: 100%;
-  max-width: 600px;
-  margin-bottom: 10px;
-  cursor: pointer; /* Makes the cursor clickable */
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  background: #fff;
 }
 
-.pet-item {
-  display: flex;
-  align-items: center;
+.info-item-content {
+  padding: 16px;
 }
 
-.pet-icon {
-  font-size: 24px;
-  color: #333;
-  margin-right: 10px; /* Space between icon and text */
-}
-
-.pet-name {
-  font-size: 16px;
-  color: #666;
-}
-
-.no-pets {
+.info-details {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-.no-pets-svg {
-  margin-bottom: 10px;
-  pointer-events: none; /* Prevents clicking */
+.info-detail {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.detail-icon {
+  font-size: 24px;
+  color: #007bff;
+  margin-right: 12px; /* Space between icon and label */
+}
+
+.detail-text {
+  font-size: 13px;
+  color: #555;
+  flex-grow: 1;
+  font-weight: 500;
+
+}
+
+.detail-data {
+  font-size: 12px;
+  color: #333;
+}
+
+.loading {
+  font-size: 20px;
+  color: #666;
+  margin: 20px;
 }
 
 @media (min-width: 768px) {
   .info-page {
     padding: 30px;
-  }
-
-  .pet-name {
-    font-size: 18px;
-  }
-
-  .no-pets-svg {
-    width: 35rem; /* Adjust size for larger screens */
   }
 }
 
@@ -139,13 +160,6 @@ onMounted(() => {
   .info-page {
     padding: 50px;
   }
-
-  .pet-name {
-    font-size: 20px;
-  }
-
-  .no-pets-svg {
-    width: 35rem; /* Adjust size for larger screens */
-  }
 }
 </style>
+

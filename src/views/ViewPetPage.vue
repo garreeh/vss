@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <Header :title="$route.params.petName" />
+    <Header />
 
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
@@ -17,7 +17,7 @@
           </ion-avatar>
         </div>
 
-        <strong class="capitalize">Hi, {{ petName }}</strong>
+        <strong class="capitalize">{{ petName }}</strong>
 
         <ion-segment v-model="selectedSegment">
           <ion-segment-button value="PetInfo">

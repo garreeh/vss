@@ -14,6 +14,12 @@
             <p class="pet-name">{{ pet.patient_name }}</p>
           </ion-label>
         </ion-item>
+        <!-- Click to View text -->
+        <div class="view-container">
+          <div class="view-details">
+            <span>Click to View</span>
+          </div>
+        </div>
       </ion-card>
     </div>
     
@@ -21,18 +27,28 @@
     <div v-else class="no-pets">
       <img src="./../../images/svg/no-data.svg" alt="No Pets" class="no-pets-svg" />
     </div>
+
+    <!-- IonLoading Component -->
+    <ion-loading
+      :is-open="showLoader"
+      message="Loading pet details..."
+      spinner="crescent"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import apiService from './../../apiServices/apiService.js';
+import { useRouter } from 'vue-router';
 import { pawSharp } from 'ionicons/icons';
-import { IonLabel, IonIcon, IonCard, IonItem } from '@ionic/vue';
+import { IonLabel, IonIcon, IonCard, IonItem, IonLoading } from '@ionic/vue';
 
 // Data references
 const pets = ref([]);
 const loading = ref(true); // Add a loading state
+const showLoader = ref(false); // Loading spinner state
+const router = useRouter(); // Use this for navigation
 
 const fetchDataAndDisplay = async () => {
   try {
@@ -59,16 +75,23 @@ const fetchDataAndDisplay = async () => {
 };
 
 const goToPetDetails = (pet) => {
+  showLoader.value = true; // Show the loading spinner
+  
   // Construct the URL using the pet's name
   const petName = encodeURIComponent(pet.patient_name);
 
-  //Production
+  // Production
   const url = `/pet-details/${petName}`;
-
 
   // This is for testing only
   // console.log(url)
-  window.location.href = url;
+  // window.location.href = url;
+
+  // Simulate a delay for loading (you can remove this in production)
+  setTimeout(() => {
+    showLoader.value = false; // Hide the loading spinner
+    router.push(url); // Navigate to the pet details page
+  }, 1000); // Adjust the timeout as needed, or remove if not needed
 };
 
 // Fetch data when component is mounted
@@ -94,6 +117,7 @@ onMounted(() => {
   max-width: 600px;
   margin-bottom: 10px;
   cursor: pointer; /* Makes the cursor clickable */
+  position: relative; /* For positioning the "Click to View" text */
 }
 
 .pet-item {
@@ -101,15 +125,46 @@ onMounted(() => {
   align-items: center;
 }
 
+.loading {
+  font-size: 20px;
+  color: #666;
+  margin: 20px;
+}
+
 .pet-icon {
   font-size: 24px;
-  color: #333;
+  color: #007bff; /* Blue color for the icon */
   margin-right: 10px; /* Space between icon and text */
 }
 
 .pet-name {
   font-size: 16px;
   color: #666;
+}
+
+.view-container {
+  position: relative;
+}
+
+.view-details {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  background-color: #f0f8ff;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  font-size: 14px;
+  color: #007bff; /* Blue color for the text */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.info-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .no-pets {
@@ -151,4 +206,3 @@ onMounted(() => {
   }
 }
 </style>
-
