@@ -82,6 +82,12 @@ To Build in Release App in APK
 npx cap sync
 cd android > ./gradlew assembleRelease
 
+TO Re-Build in Release App in APK
+
+npx cap sync
+cd android > ./gradlew clean
+./gradlew assembleRelease
+
 
 RUN LOCALLY
 

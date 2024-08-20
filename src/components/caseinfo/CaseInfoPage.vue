@@ -96,7 +96,7 @@
       <h3 class="modal-title">{{ modalTitle }}</h3>
       <ul>
         <li v-for="(item, idx) in modalContent.split('\r\n')" :key="idx">
-          {{ item || 'No Details' }}
+          {{ item }}
         </li>
       </ul>
     </div>
@@ -359,6 +359,7 @@ onMounted(() => {
 .modal-content li {
   padding: 10px 0;
   border-bottom: 1px solid #ddd; /* Line for each item in the modal */
+  text-align: start;
 }
 
 .modal-content li:last-child {

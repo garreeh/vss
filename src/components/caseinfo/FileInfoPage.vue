@@ -17,20 +17,30 @@
                 />
               </template>
               <template v-else-if="isPDF(attachment.lab_file)">
-                <a 
-                  href="#" 
-                  @click.prevent="downloadFile(getFullUrl(attachment.lab_file), 'application/pdf')"
-                >
-                  {{ attachment.lab_file_name }}
-                </a>
+                <div class="file-wrapper">
+                  <ion-icon 
+                    class="file-icon" 
+                    :icon="documentTextOutline"
+                    @click="handleFile(getFullUrl(attachment.lab_file))"
+                  ></ion-icon>
+                  <span 
+                    @click="handleFile(getFullUrl(attachment.lab_file))"
+                    class="file-label"
+                    >{{ attachment.lab_file_name }}</span>
+                </div>
               </template>
               <template v-else-if="isDOCX(attachment.lab_file)">
-                <a 
-                  href="#" 
-                  @click.prevent="downloadFile(getFullUrl(attachment.lab_file), 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')"
-                >
-                  {{ attachment.lab_file_name }}
-                </a>
+                <div class="file-wrapper">
+                  <ion-icon 
+                    :icon="documentTextOutline"
+                    class="file-icon" 
+                    @click="handleFile(getFullUrl(attachment.lab_file))"
+                  ></ion-icon>
+                  <span 
+                    class="file-label"
+                    @click="handleFile(getFullUrl(attachment.lab_file))"
+                  >{{ attachment.lab_file_name }}</span>
+                </div>
               </template>
               <template v-else>
                 <a 
@@ -46,6 +56,10 @@
 
           <div v-else class="no-pets">
             <img src="./../../images/svg/no-data.svg" alt="No Pets" class="no-pets-svg" />
+          </div>
+
+          <div class="no-pets">
+            {{ errorMessage }}
           </div>
         </div>
       </ion-accordion>
@@ -69,7 +83,12 @@ import { ref, onMounted } from 'vue';
 import apiService from './../../apiServices/apiService.js';
 import { useRoute } from 'vue-router';
 import { close } from 'ionicons/icons';
-import { IonLabel, IonAccordion, IonAccordionGroup, IonIcon, IonItem } from '@ionic/vue';
+import { Browser } from '@capacitor/browser';
+import { IonLabel, IonAccordion, IonAccordionGroup, IonIcon, IonItem, } from '@ionic/vue';
+
+import { 
+  documentTextOutline,
+} from 'ionicons/icons'; // Import icons from ionicons
 
 const attachments = ref([]);
 
@@ -122,7 +141,6 @@ const errorMessage = ref(null);
 
 const fetchLaboratoryAttachments = async () => {
   try {
-
     const clientId = localStorage.getItem('clientId');
     const databaseName = localStorage.getItem('databaseName');
     const case_id = route.params.case_id;
@@ -160,24 +178,26 @@ const closeModal = () => {
   isModalOpen.value = false;
 };
 
-const downloadFile = async (url, mimeType) => {
-  try {
-    const fileName = url.split('/').pop() || 'tempFile';
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    link.target = '_blank';
-    link.click();
-  } catch (error) {
-    console.error('Error downloading file:', error);
-  }
-};
-
 const isImage = (filePath) => /\.(jpg|jpeg|png)$/i.test(filePath);
 const isPDF = (filePath) => /\.pdf$/i.test(filePath);
 const isDOCX = (filePath) => /\.docx$/i.test(filePath);
 const isMobile = () => /Mobi|Android/i.test(navigator.userAgent);
- 
+
+const getMimeType = (filePath) => {
+  if (isPDF(filePath)) return 'application/pdf';
+  if (isDOCX(filePath)) return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+  return '';
+};
+
+const handleFile = async (url) => {
+  try {
+    await Browser.open({ url });
+  } catch (error) {
+    console.error('Error opening URL in browser:', error);
+    errorMessage.value = 'Unable to open the URL. Please try again later.';
+  }
+};
+
 onMounted(() => {
   const caseId = parseInt(route.params.case_id, 10);
   if (isNaN(caseId)) {
@@ -201,14 +221,26 @@ onMounted(() => {
   transform: scale(1.05);
 }
 
-.attachment-item a {
-  display: block;
-  color: #007bff;
-  text-decoration: underline;
+.attachment-item {
+  text-align: center;
 }
 
-.attachment-item a:hover {
-  text-decoration: none;
+.file-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.file-icon {
+  font-size: 2.5rem;
+  cursor: pointer;
+  margin-bottom: 5px; /* Adjust this margin to control the space between the icon and the label */
+}
+
+.file-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #333;
 }
 
 .no-pets-svg {
@@ -290,4 +322,5 @@ onMounted(() => {
   width: 80%;
   height: 80%;
 }
+
 </style>

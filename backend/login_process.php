@@ -1,4 +1,5 @@
 <?php
+ob_start();
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -10,7 +11,7 @@ $client_password = isset($data['client_password']) ? $data['client_password'] : 
 
 // Connection details for all databases
 $databases = [
-    'animed' => ['conn_file' => 'conn_animed.php'],
+    'animated' => ['conn_file' => 'conn_animated.php'],
     'avvet' => ['conn_file' => 'conn_av_vet.php'],
     'betlehem' => ['conn_file' => 'conn_betlehem.php'],
     'cebuvetcentral' => ['conn_file' => 'conn_cebuvetcentral.php'],

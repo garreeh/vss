@@ -66,6 +66,13 @@ export default {
       database_name: databaseName,
       case_id: case_id
     });
+  },
+
+  fetchBillingData(clientId, databaseName) {
+    return apiClient.post('billing_display.php', {
+      client_id: clientId,
+      database_name: databaseName,
+    });
   }
   
   // Add other API functions as needed
