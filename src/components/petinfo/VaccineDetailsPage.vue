@@ -21,12 +21,12 @@
             </div>
             <div class="info-detail">
               <ion-icon :icon="calendarOutline" class="detail-icon"></ion-icon>
-              <span class="detail-text">Vaccine Date:</span>
+              <span class="detail-text">Date:</span>
               <span class="detail-data">{{ pet.date_vaccine || 'No Details' }}</span>
             </div>
             <div class="info-detail">
               <ion-icon :icon="calendarOutline" class="detail-icon"></ion-icon>
-              <span class="detail-text">Vaccine Expiration:</span>
+              <span class="detail-text">Expiration:</span>
               <span class="detail-data">{{ pet.expiration || 'No Details' }}</span>
             </div>
             <div class="info-detail">

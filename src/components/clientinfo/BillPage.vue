@@ -37,7 +37,7 @@
             <div class="info-detail">
               <ion-icon :icon="calendarOutline" class="detail-icon"></ion-icon>
               <span class="detail-text">Date:</span>
-              <span class="detail-data">{{ pet.date_of_bill || 'No Details' }}</span>
+              <span class="detail-data">{{ pet.date_of_billing || 'No Details' }}</span>
             </div>
             <div class="info-detail">
               <ion-icon :icon="informationOutline" class="detail-icon"></ion-icon>
