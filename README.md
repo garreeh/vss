@@ -93,6 +93,9 @@ npx cap sync
 cd android > ./gradlew clean
 ./gradlew assembleRelease
 
+for .aab
+./gradlew bundleRelease
+
 
 Run Locally:
 
